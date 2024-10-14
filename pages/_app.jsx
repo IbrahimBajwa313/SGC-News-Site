@@ -1,6 +1,7 @@
 import Footer2 from '@/components/Footer2'
 import Header from '@/components/Header'
 import { FaWhatsapp } from "react-icons/fa";
+import Sidebar from "../components/Sidebar"; 
 import Link from "next/link";
 import "@/styles/globals.css";
 import Head from "next/head";
@@ -56,7 +57,8 @@ export default function App({ Component, pageProps }) {
 
      
         <Component />
-  
+        {/* Sidebar */}
+      
     <Footer2 />
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />

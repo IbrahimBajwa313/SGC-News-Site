@@ -41,7 +41,7 @@ const Footer = () => {
         {/* Logo and Social Links */}
         <div className="lg:col-span-1">
           <h1 className="text-xl lg:text-2xl font-bold mb-3 flex items-center">
-            <img src="./save-gaza-logo.png" className="w-8 mr-4" alt="Logo" />
+            <img src="/save-gaza-logo.png" className="w-8 mr-4" alt="Logo" />
             <span className="text-[#2b9150]">Save Gaza Campaign</span>
           </h1>
           <p className="text-gray-400 mb-5">Stand for Gaza & Unite for Gaza</p>
