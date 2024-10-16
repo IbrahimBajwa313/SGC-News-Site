@@ -1,135 +1,127 @@
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useState } from "react";
+import { useRouter } from "next/router";
 
-export default function UpdatePost({ postId }) {
-    const [post, setPost] = useState(null);
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [category, setCategory] = useState('');
-    const [image, setImage] = useState(null);
-    const [categories, setCategories] = useState([]);
+export default function UpdatePostPage() {
+  const router = useRouter();
+  const postId = router.query.id; // Simulate getting post ID from query params
 
-    useEffect(() => {
-        // Fetch post details
-        fetch(`/api/posts/${postId}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setPost(data);
-                setTitle(data.title);
-                setDescription(data.description);
-                setCategory(data.category);
-            });
+  // Simulated post data, hardcoded for now
+  const [postData, setPostData] = useState({
+    post_id: 1,
+    title: "Sample Post Title",
+    description: "This is the description of the post.",
+    category: 1, // Assume 1 is the category ID
+    post_img: "sample-image.jpg", // Simulated image file
+  });
 
-        // Fetch categories
-        fetch('/api/categories')
-            .then((res) => res.json())
-            .then((data) => {
-                setCategories(data);
-            });
-    }, [postId]);
+  const categories = [
+    { category_id: 1, category_name: "Technology" },
+    { category_id: 2, category_name: "Business" },
+    { category_id: 3, category_name: "Health" },
+  ];
 
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-    };
+  const [formData, setFormData] = useState({
+    post_title: postData.title,
+    postdesc: postData.description,
+    category: postData.category,
+    new_image: null,
+    old_image: postData.post_img,
+  });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('category', category);
-        if (image) formData.append('image', image);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-        const response = await fetch(`/api/posts/${postId}`, {
-            method: 'PUT',
-            body: formData,
-        });
+  const handleImageChange = (e) => {
+    setFormData({ ...formData, new_image: e.target.files[0] });
+  };
 
-        if (response.ok) {
-            alert('Post updated successfully!');
-        } else {
-            alert('Failed to update the post.');
-        }
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here we simulate the update process (You would handle API calls here in a real app)
+    console.log("Updated data:", formData);
+    alert("Post updated successfully!");
+    // Redirect after successful update
+    router.push("/admin/posts");
+  };
 
-    return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Update Post</h1>
-            {post ? (
-                <form onSubmit={handleSubmit} encType="multipart/form-data">
-                    <input type="hidden" name="post_id" value={post._id} />
+  return (
+    <div className="min-h-screen bg-gray-100 py-8">
+      <div className="container mx-auto px-4">
+        <div className="w-full lg:w-2/3 mx-auto">
+          <h1 className="text-3xl font-semibold text-center mb-6">Update Post</h1>
 
-                    <div className="mb-4">
-                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                            Title
-                        </label>
-                        <input
-                            type="text"
-                            id="title"
-                            name="title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
-                    </div>
+          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+            <input type="hidden" name="post_id" value={postData.post_id} />
 
-                    <div className="mb-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                            Description
-                        </label>
-                        <textarea
-                            id="description"
-                            name="description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            rows="5"
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
-                    </div>
+            {/* Title */}
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-2">Title</label>
+              <input
+                type="text"
+                name="post_title"
+                value={formData.post_title}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
 
-                    <div className="mb-4">
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-                            Category
-                        </label>
-                        <select
-                            id="category"
-                            name="category"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                            {categories.map((cat) => (
-                                <option key={cat._id} value={cat._id}>
-                                    {cat.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+            {/* Description */}
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-2">Description</label>
+              <textarea
+                name="postdesc"
+                rows="5"
+                value={formData.postdesc}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
 
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Post Image</label>
-                        <img
-                            src={`/uploads/${post.image}`}
-                            alt="Post Image"
-                            className="mb-4 h-32"
-                        />
-                        <input
-                            type="file"
-                            onChange={handleImageChange}
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
-                    </div>
+            {/* Category */}
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-2">Category</label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              >
+                {categories.map((cat) => (
+                  <option key={cat.category_id} value={cat.category_id}>
+                    {cat.category_name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-                    <button
-                        type="submit"
-                        className="px-4 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700"
-                    >
-                        Update Post
-                    </button>
-                </form>
-            ) : (
-                <p>Loading post details...</p>
-            )}
+            {/* Image */}
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-2">Post Image</label>
+              <img src={`/images/${postData.post_img}`} alt="Post" className="mb-4 w-48 h-auto rounded-lg" />
+              <label className="block text-gray-700 font-medium mb-2">Change Image</label>
+              <input
+                type="file"
+                name="new_image"
+                onChange={handleImageChange}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <input type="hidden" name="old_image" value={postData.post_img} />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white font-medium py-2 rounded-lg hover:bg-blue-600"
+            >
+              Update
+            </button>
+          </form>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

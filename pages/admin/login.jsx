@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const hardcodedUsername = 'admin';
+  const hardcodedUsername = 'ibraim';
   const hardcodedPassword = '123';
 
   const handleSubmit = (e) => {
