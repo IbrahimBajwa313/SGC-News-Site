@@ -1,13 +1,14 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+// models/Post.js
+import mongoose from 'mongoose';
 
-const postSchema = new Schema({
+const PostSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   category: { type: String, required: true },
-  post_date: { type: String, required: true },
-  author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  post_img: { type: String, required: true }
+  postDate: { type: Date, default: Date.now },
+  author: { type: String, required: true },
+  postImg: { type: String }, // Store the file path or URL
 });
 
-module.exports = mongoose.model('Post', postSchema);
+const Post = mongoose.models.Post || mongoose.model('Post', PostSchema);
+export default Post;
