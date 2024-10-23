@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
 
-// Connection string for MongoDB
-export const connectionSrt = "mongodb+srv://ibrahimbajwa1065:ABib381381@cluster0.bathrnt.mongodb.net/SGC?retryWrites=true&w=majority";
-
 // Middleware for connecting to the database
 const connectDB = handler => async (req, res) => {
   // Check if already connected
@@ -11,7 +8,7 @@ const connectDB = handler => async (req, res) => {
   }
   
   // Connect to the database
-  await mongoose.connect(connectionSrt);
+  await mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
   return handler(req, res);
 };
 
