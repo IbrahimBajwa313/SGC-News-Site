@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Sidebar from "../components/Sidebar"; // Make sure the path to Sidebar.js is correct
+import { useState } from "react";  
 
 export default function HomePage() {
   // Hardcoded posts data (replace this with dynamic content later)
@@ -104,10 +103,7 @@ export default function HomePage() {
         </div>
       </div>
   
-      {/* Sidebar */}
-      <div className="w-full md:w-1/3 mt-8 md:mt-0">
-        <Sidebar />
-      </div>
+      
     </div>
   </div>
   
