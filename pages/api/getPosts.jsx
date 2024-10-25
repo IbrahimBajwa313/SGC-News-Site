@@ -1,14 +1,14 @@
 import connectDB from "../middleware/mongoose";
-import Post from '../../models/Post'; // Adjust this import if necessary
+import Post from '../../models/Post';
 
-export default async function handler(req, res) {
-  await connectDB(); // Connect to the database
-
+const handler = async (req, res) => {
   try {
-    const posts = await Post.find({}).sort({ post_date: -1 }); // Fetch posts and sort by postDate
+    const posts = await Post.find({}).sort({ post_date: -1 });
     res.status(200).json({ success: true, data: posts });
   } catch (error) {
-    console.error('Error fetching posts:', error);
+    console.error('Error fetching posts:', error.message);
     res.status(500).json({ success: false, message: 'Error fetching posts' });
   }
-}
+};
+
+export default connectDB(handler); // Wrap the handler with the connectDB middleware

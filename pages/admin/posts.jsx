@@ -56,7 +56,7 @@ const Posts = () => {
                 <td className="border border-gray-300 p-2">{(page - 1) * limit + index + 1}</td>
                 <td className="border border-gray-300 p-2">{post.title}</td>
                 <td className="border border-gray-300 p-2">{post.category}</td>
-                <td className="border border-gray-300 p-2">{new Date(post.postDate).toLocaleDateString()}</td> {/* Format date */}
+                <td className="border border-gray-300 p-2">{new Date(post.post_date).toLocaleDateString()}</td> {/* Format date */}
                 <td className="border border-gray-300 p-2">{post.author}</td>
                 <td className="border border-gray-300 p-2">
                   <Link href={`/edit-post?id=${post._id}`}>
