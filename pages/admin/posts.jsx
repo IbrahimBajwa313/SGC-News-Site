@@ -1,35 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
-// Hardcoded post data
-const posts = [
-  {
-    id: 1,
-    title: "Understanding JavaScript",
-    category: "Technology",
-    date: "2024-10-01",
-    author: "Admin",
-  },
-  {
-    id: 2,
-    title: "React.js for Beginners",
-    category: "Technology",
-    date: "2024-10-05",
-    author: "Admin",
-  },
-  {
-    id: 3,
-    title: "Machine Learning 101",
-    category: "Science",
-    date: "2024-10-10",
-    author: "John Doe",
-  },
-  // Add more posts as needed
-];
-
-const PostsPage = () => {
+const Posts = () => {
+  const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const limit = 7;
+
+  // Fetch posts from the API
+  const fetchPosts = async () => {
+    const res = await fetch('/api/getPosts');
+    const data = await res.json();
+    if (data.success) {
+      setPosts(data.data); // Set the posts from the API response
+    } else {
+      console.error('Failed to fetch posts:', data.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts(); // Fetch posts on component mount
+  }, []);
 
   // Pagination Logic
   const totalPosts = posts.length;
@@ -37,7 +27,7 @@ const PostsPage = () => {
   const currentPosts = posts.slice((page - 1) * limit, page * limit);
 
   return (
-    <div className="container  mx-auto  p-4 min-h-screen mt-20">
+    <div className="container mx-auto p-4 min-h-screen mt-20">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">All Posts</h1>
         <Link href="/admin/create-post">
@@ -62,19 +52,19 @@ const PostsPage = () => {
           </thead>
           <tbody>
             {currentPosts.map((post, index) => (
-              <tr key={post.id}>
-                <td className="border border-gray-300 p-2">{index + 1}</td>
+              <tr key={post._id}> {/* Use the MongoDB _id as the key */}
+                <td className="border border-gray-300 p-2">{(page - 1) * limit + index + 1}</td>
                 <td className="border border-gray-300 p-2">{post.title}</td>
                 <td className="border border-gray-300 p-2">{post.category}</td>
-                <td className="border border-gray-300 p-2">{post.date}</td>
+                <td className="border border-gray-300 p-2">{new Date(post.postDate).toLocaleDateString()}</td> {/* Format date */}
                 <td className="border border-gray-300 p-2">{post.author}</td>
                 <td className="border border-gray-300 p-2">
-                  <Link href={`/edit-post?id=${post.id}`}>
+                  <Link href={`/edit-post?id=${post._id}`}>
                     <button className="text-blue-600 hover:underline">Edit</button>
                   </Link>
                 </td>
                 <td className="border border-gray-300 p-2">
-                  <Link href={`/delete-post?id=${post.id}`}>
+                  <Link href={`/delete-post?id=${post._id}`}>
                     <button className="text-red-600 hover:underline">Delete</button>
                   </Link>
                 </td>
@@ -125,4 +115,4 @@ const PostsPage = () => {
   );
 };
 
-export default PostsPage;
+export default Posts ;
