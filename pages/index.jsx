@@ -36,7 +36,7 @@ export default function HomePage() {
             <div key={post._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="md:flex">
                 <div className="md:flex-shrink-0">
-                  <img className="h-48 w-full object-cover md:w-48" src={`/uploads/${post.postImg}`} alt={post.title} />
+                  <img className="h-48 w-full object-cover md:w-48" src={`/uploads/${post.post_img}`} alt={post.title} />
                 </div>
                 <div className="p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-2 hover:text-blue-500 transition">
