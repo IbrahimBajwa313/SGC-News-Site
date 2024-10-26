@@ -8,7 +8,7 @@ const PostSchema = new mongoose.Schema({
   post_date: { type: Date, required: true },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
   post_img: { type: String, required: true },
-}, { collection: 'SGC-News.posts' }); // Specify the collection name
+}, { collection: 'posts' }); // Specify the collection name
 
 const Post = mongoose.models.Post || mongoose.model('Post', PostSchema);
 
