@@ -57,7 +57,7 @@ export default function Users() {
                 </Link>
               </td>
               <td className="py-3 px-4">
-                <Link className="text-blue-500 hover:underline" href={`/admin/deleteUser/${user._id}`}>
+                <Link className="text-red-700  hover:underline" href={`/admin/deleteUser/${user._id}`}>
                   Delete
                 </Link>
               </td>

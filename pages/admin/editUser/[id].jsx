@@ -11,6 +11,7 @@ const EditUser = () => {
     role: "0"
   });
 
+  // Fetch user data when 'id' changes
   useEffect(() => {
     if (id) {
       fetch(`/api/users/${id}`)
@@ -22,10 +23,12 @@ const EditUser = () => {
     }
   }, [id]);
 
+  // Handle input changes
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,7 +58,7 @@ const EditUser = () => {
           <input
             type="text"
             name="first_name"
-            value={user.first_name}
+            value={user.first_name} // Bind value to state
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             required
@@ -66,7 +69,7 @@ const EditUser = () => {
           <input
             type="text"
             name="last_name"
-            value={user.last_name}
+            value={user.last_name} // Bind value to state
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             required
@@ -77,7 +80,7 @@ const EditUser = () => {
           <input
             type="text"
             name="username"
-            value={user.username}
+            value={user.username} // Bind value to state
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             required
@@ -87,7 +90,7 @@ const EditUser = () => {
           <label className="block font-medium">User Role</label>
           <select
             name="role"
-            value={user.role}
+            value={user.role} // Bind value to state
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
           >
@@ -97,7 +100,7 @@ const EditUser = () => {
         </div>
         <button type="submit" className="bg-blue-500 text-white p-2 rounded-lg w-full">
           Update
-        </button>
+        </button>  
       </form>
     </div>
   );
