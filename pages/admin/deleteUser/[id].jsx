@@ -45,11 +45,12 @@ const DeleteUser = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Delete User</h1>
+    <div className="flex justify-center items-center  bg-gray-100 p-16">
+    <div className="bg-white shadow-lg rounded-lg w-full max-w-3xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">Delete User</h1>
       <div className="space-y-4">
         <div className="form-group">
-          <label className="block font-medium">First Name</label>
+          <label className="block font-medium mb-1">First Name</label>
           <input
             type="text"
             name="first_name"
@@ -59,7 +60,7 @@ const DeleteUser = () => {
           />
         </div>
         <div className="form-group">
-          <label className="block font-medium">Last Name</label>
+          <label className="block font-medium mb-1">Last Name</label>
           <input
             type="text"
             name="last_name"
@@ -69,7 +70,7 @@ const DeleteUser = () => {
           />
         </div>
         <div className="form-group">
-          <label className="block font-medium">Username</label>
+          <label className="block font-medium mb-1">Username</label>
           <input
             type="text"
             name="username"
@@ -79,7 +80,7 @@ const DeleteUser = () => {
           />
         </div>
         <div className="form-group">
-          <label className="block font-medium">User Role</label>
+          <label className="block font-medium mb-1">User Role</label>
           <select
             name="role"
             value={user.role} // Display the current role
@@ -92,12 +93,14 @@ const DeleteUser = () => {
         </div>
         <button
           onClick={handleDelete}
-          className="bg-red-500 text-white p-2 rounded-lg w-full"
+          className="bg-red-500 text-white p-2 rounded-lg w-full mt-4 hover:bg-red-600 transition duration-200"
         >
           Delete User
         </button>
       </div>
     </div>
+  </div>
+  
   );
 };
 
