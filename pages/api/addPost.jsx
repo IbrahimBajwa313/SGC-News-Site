@@ -1,69 +1,52 @@
-import formidable from "formidable";
-import fs from "fs";
-import path from "path";
+import connectDB from "../middleware/mongoose";
+import User from "../../models/User"; // Correct model import
+import bcrypt from "bcrypt"; // To hash the password
 
-// Disable the default body parser for formidable to work
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-export default async (req, res) => {
+const handler = async (req, res) => {
   if (req.method === "POST") {
-    const form = formidable({ multiples: false });
+    try {
+      // Extracting data from the request body
+      const { first_name, last_name, username, password, role } = req.body;
 
-    // Parse the form data
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: "File upload failed",
-          error: err.message,
-        });
+      // Validate required fields
+      if (!first_name || !last_name || !username || !password || !role) {
+        return res
+          .status(400)
+          .json({ success: false, message: "All fields are required" });
       }
 
-      // Ensure that the uploaded file exists and has the required properties
-      const uploadedFile = files.image;
-      if (!uploadedFile || !uploadedFile.originalFilename) {
-        return res.status(400).json({
-          success: false,
-          message: "No file uploaded or filename is missing",
-        });
+      // Check if a user with the same username already exists
+      const existingUser = await User.findOne({ username });
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Username already taken" });
       }
 
-      // Define the new path for saving the uploaded file
-      const oldPath = uploadedFile.filepath;
-      const newPath = path.join(
-        process.cwd(),
-        "public",
-        "uploads",
-        uploadedFile.originalFilename
-      );
+       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Move the file to the desired directory
-      fs.rename(oldPath, newPath, (err) => {
-        if (err) {
-          return res.status(500).json({
-            success: false,
-            message: "Error saving file",
-            error: err.message,
-          });
-        }
-
-        // Successfully handled the file upload
-        return res.status(200).json({
-          success: true,
-          message: "Post created successfully",
-          data: { ...fields, imageUrl: `/uploads/${uploadedFile.originalFilename}` },
-        });
+      // Create a new user document
+      const newUser = new User({
+        first_name,
+        last_name,
+        username,
+        password: hashedPassword,
+        role,
       });
-    });
+
+      // Save the user document to the database
+      await newUser.save();
+
+      res.status(201).json({ success: true, message: "User added successfully" });
+    } catch (error) {
+      console.error("Error adding user:", error.message);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
   } else {
-    // Send a response for unsupported methods
-    return res.status(405).json({
-      success: false,
-      message: "Method not allowed",
-    });
+    res.status(405).json({ success: false, message: "Method not allowed" });
   }
 };
+
+export default connectDB(handler);
