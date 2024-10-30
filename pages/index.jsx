@@ -30,7 +30,7 @@ export default function HomePage() {
       <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">Latest News</h1>
       <div className="grid grid-cols-1 gap-6">
         {posts.length === 0 ? (
-          <p className="text-center text-gray-500">No posts available.</p>
+          <p className="text-center text-gray-500">Wait I am trying to load items.</p>
         ) : (
           posts.map((post) => (
             <div key={post._id} className="bg-white rounded-lg shadow-lg overflow-hidden">

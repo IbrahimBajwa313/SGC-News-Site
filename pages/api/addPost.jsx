@@ -1,45 +1,43 @@
 import connectDB from "../middleware/mongoose";
-import User from "../../models/User"; // Correct model import
-import bcrypt from "bcrypt"; // To hash the password
+import Post from "../../models/Post"; // Correct model import
+import mongoose from "mongoose";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
     try {
       // Extracting data from the request body
-      const { first_name, last_name, username, password, role } = req.body;
+      const { title, description, category, post_date, author, post_img } = req.body;
 
       // Validate required fields
-      if (!first_name || !last_name || !username || !password || !role) {
+      if (!title || !description || !category || !post_date || !author || !post_img) {
         return res
           .status(400)
           .json({ success: false, message: "All fields are required" });
       }
 
-      // Check if a user with the same username already exists
-      const existingUser = await User.findOne({ username });
-      if (existingUser) {
+      // Check if the author ID is a valid ObjectId
+      if (!mongoose.Types.ObjectId.isValid(author)) {
         return res
           .status(400)
-          .json({ success: false, message: "Username already taken" });
+          .json({ success: false, message: "Invalid author ID" });
       }
 
-       const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Create a new user document
-      const newUser = new User({
-        first_name,
-        last_name,
-        username,
-        password: hashedPassword,
-        role,
+      // Create a new post document
+      const newPost = new Post({
+        title,
+        description,
+        category,
+        post_date,
+        author,
+        post_img,
       });
 
-      // Save the user document to the database
-      await newUser.save();
+      // Save the post document to the database
+      await newPost.save();
 
-      res.status(201).json({ success: true, message: "User added successfully" });
+      res.status(201).json({ success: true, message: "Post added successfully" });
     } catch (error) {
-      console.error("Error adding user:", error.message);
+      console.error("Error adding post:", error.message);
       res
         .status(500)
         .json({ success: false, message: "Internal server error" });
