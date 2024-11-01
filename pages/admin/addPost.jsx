@@ -2,54 +2,53 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 export default function CreatePost() {
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
 
-  // State variables for the form fields
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [author, setAuthor] = useState(""); // To store the logged-in user's name
-  const [postDate, setPostDate] = useState(""); // Automatically set the date
-  const [image, setImage] = useState(null);
+  const [author, setAuthor] = useState(""); // Store author ObjectId
+  const [postDate, setPostDate] = useState("");
+  const [imageName, setImageName] = useState(""); // Store the image name
 
-  // Mock function to fetch logged-in user details (replace with actual authentication logic)
   useEffect(() => {
-    // Assuming you fetch the logged-in user's details from a context or API
-    const loggedInUser = { name: "Ibrahim Bajwa" }; // Example name, replace with actual user name
-    setAuthor(loggedInUser.name);
-
-    // Set the current date as the post date
-    setPostDate(new Date().toISOString().split("T")[0]); // Format: YYYY-MM-DD
+    // Hardcoded user object with an ObjectId and name
+    const loggedInUser = { _id: "642c5f88397c2f1a7d8e9a63", name: "Ibrahim Bajwa" }; // Example ObjectId
+    setAuthor(loggedInUser._id); // Store the ObjectId
+    setPostDate(new Date().toISOString().split("T")[0]);
   }, []);
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setImageName(file.name); // Save only the image name
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare the form data
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("category", category);
-    formData.append("author", author);
-    formData.append("postDate", postDate);
-    if (image) {
-      formData.append("image", image);
-    }
+    const postData = {
+      title,
+      description,
+      category,
+      author, // Now this is the ObjectId
+      postDate,
+      imageName, // Only send the image name
+    };
 
-    // Make a POST request to your API to create a new post
     const res = await fetch("/api/addPost", {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
     });
 
     const data = await res.json();
     if (data.success) {
       alert("Post created successfully");
-      router.push("/admin/posts"); // Navigate to /admin/posts page
+      router.push("/admin/posts");
     } else {
       alert("Failed to create post");
     }
@@ -60,7 +59,6 @@ export default function CreatePost() {
       <h1 className="text-2xl font-bold mb-4">Create New Post</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Title */}
         <div>
           <label className="block font-medium">Title</label>
           <input
@@ -72,7 +70,6 @@ export default function CreatePost() {
           />
         </div>
 
-        {/* Description */}
         <div>
           <label className="block font-medium">Description</label>
           <textarea
@@ -84,7 +81,6 @@ export default function CreatePost() {
           ></textarea>
         </div>
 
-        {/* Category */}
         <div>
           <label className="block font-medium">Category</label>
           <select
@@ -104,7 +100,6 @@ export default function CreatePost() {
           </select>
         </div>
 
-        {/* File Upload */}
         <div>
           <label className="block font-medium">Upload Image</label>
           <input
@@ -114,7 +109,6 @@ export default function CreatePost() {
           />
         </div>
 
-        {/* Submit Button */}
         <div>
           <button
             type="submit"

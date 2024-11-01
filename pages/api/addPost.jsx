@@ -1,25 +1,17 @@
 import connectDB from "../middleware/mongoose";
 import Post from "../../models/Post"; // Correct model import
-import mongoose from "mongoose";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
     try {
       // Extracting data from the request body
-      const { title, description, category, post_date, author, post_img } = req.body;
+      const { title, description, category, postDate, author, imageName } = req.body;
 
       // Validate required fields
-      if (!title || !description || !category || !post_date || !author || !post_img) {
+      if (!title || !description || !category || !postDate || !author || !imageName) {
         return res
           .status(400)
           .json({ success: false, message: "All fields are required" });
-      }
-
-      // Check if the author ID is a valid ObjectId
-      if (!mongoose.Types.ObjectId.isValid(author)) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid author ID" });
       }
 
       // Create a new post document
@@ -27,9 +19,9 @@ const handler = async (req, res) => {
         title,
         description,
         category,
-        post_date,
+        post_date: postDate, // Renamed to match 'postDate' from the client
         author,
-        post_img,
+        post_img: imageName, // Save only the image name here
       });
 
       // Save the post document to the database
