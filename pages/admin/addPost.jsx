@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
 export default function CreatePost() {
@@ -7,42 +7,34 @@ export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [author, setAuthor] = useState(""); // Store author ObjectId
+  const [author, setAuthor] = useState("");
   const [postDate, setPostDate] = useState("");
-  const [imageName, setImageName] = useState(""); // Store the image name
+  const fileInputRef = useRef(null); // Ref for file input
 
   useEffect(() => {
-    // Hardcoded user object with an ObjectId and name
-    const loggedInUser = { _id: "642c5f88397c2f1a7d8e9a63", name: "Ibrahim Bajwa" }; // Example ObjectId
-    setAuthor(loggedInUser._id); // Store the ObjectId
+    const loggedInUser = { _id: "642c5f88397c2f1a7d8e9a63", name: "Ibrahim Bajwa" };
+    setAuthor(loggedInUser._id);
     setPostDate(new Date().toISOString().split("T")[0]);
   }, []);
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageName(file.name); // Save only the image name
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const postData = {
-      title,
-      description,
-      category,
-      author, // Now this is the ObjectId
-      postDate,
-      imageName, // Only send the image name
-    };
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("category", category);
+    formData.append("author", author);
+    formData.append("postDate", postDate);
+
+    const file = fileInputRef.current?.files[0];
+    if (file) {
+      formData.append("image", file); // Append the file as "image"
+    }
 
     const res = await fetch("/api/addPost", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
+      body: formData,
     });
 
     const data = await res.json();
@@ -57,7 +49,6 @@ export default function CreatePost() {
   return (
     <div className="p-8 bg-white rounded-lg shadow-lg max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Create New Post</h1>
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-medium">Title</label>
@@ -69,7 +60,6 @@ export default function CreatePost() {
             required
           />
         </div>
-
         <div>
           <label className="block font-medium">Description</label>
           <textarea
@@ -80,7 +70,6 @@ export default function CreatePost() {
             required
           ></textarea>
         </div>
-
         <div>
           <label className="block font-medium">Category</label>
           <select
@@ -99,16 +88,14 @@ export default function CreatePost() {
             <option value="Israel's genocidal assault">Israel's genocidal assault</option>
           </select>
         </div>
-
         <div>
           <label className="block font-medium">Upload Image</label>
           <input
             type="file"
-            onChange={handleFileChange}
+            ref={fileInputRef} // Attach the ref here
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
           />
         </div>
-
         <div>
           <button
             type="submit"
