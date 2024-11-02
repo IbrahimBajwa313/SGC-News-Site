@@ -1,5 +1,15 @@
-import connectDB from "../../middleware/mongoose"; 
+import connectDB from "../../middleware/mongoose";
 import Post from "../../../models/Post";
+import { IncomingForm } from "formidable"; // Correct import for formidable
+import fs from "fs";
+import path from "path";
+
+// Disable Next.js default body parsing
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 const handler = async (req, res) => {
   const { id } = req.query;
@@ -18,43 +28,70 @@ const handler = async (req, res) => {
       break;
 
     case "PUT":
-      const { title, description, category, post_img } = req.body;
+      const form = new IncomingForm({
+        uploadDir: path.join(process.cwd(), "/public/uploads"),
+        keepExtensions: true,
+      });
+
+      form.parse(req, async (err, fields, files) => {
+        if (err) {
+          console.error("Error parsing form:", err);
+          return res.status(500).json({ success: false, message: "Form parsing error" });
+        }
+
+        const { title, description, category } = fields;
+        const post_img = files.post_img ? `/uploads/${files.post_img.newFilename}` : null;
+
+        try {
+          const post = await Post.findById(id);
+          if (!post) {
+            return res.status(404).json({ success: false, message: "Post not found" });
+          }
+
+          if (post_img && post.post_img) {
+            const oldImagePath = path.join(process.cwd(), "public", post.post_img);
+            fs.unlink(oldImagePath, (err) => {
+              if (err) console.error("Error deleting old image:", err);
+            });
+          }
+
+          const updatedPost = await Post.findByIdAndUpdate(
+            id,
+            { title, description, category, post_img: post_img || post.post_img },
+            { new: true }
+          );
+
+          res.status(200).json({ success: true, data: updatedPost });
+        } catch (error) {
+          res.status(500).json({ success: false, message: error.message });
+        }
+      });
+      break;
+
+    case "DELETE":
       try {
-        const updatedPost = await Post.findByIdAndUpdate(
-          id,
-          { title, description, category, post_img },
-          { new: true }
-        );
-        if (!updatedPost) {
+        const post = await Post.findById(id);
+        if (!post) {
           return res.status(404).json({ success: false, message: "Post not found" });
         }
-        res.status(200).json({ success: true, data: updatedPost });
+
+        if (post.post_img) {
+          const imagePath = path.join(process.cwd(), "public", post.post_img);
+          fs.unlink(imagePath, (err) => {
+            if (err) console.error("Error deleting image:", err);
+          });
+        }
+
+        const deletedPost = await Post.findByIdAndDelete(id);
+        res.status(200).json({ success: true, data: deletedPost });
       } catch (error) {
         res.status(500).json({ success: false, message: error.message });
       }
       break;
 
-    case "DELETE":
-      try {
-        if (!id) {
-          return res.status(400).json({ success: false, message: "Post ID is required" });
-        }
-
-        const deletedPost = await Post.findByIdAndDelete(id);
-        if (!deletedPost) {
-          return res.status(404).json({ success: false, message: "Post not found" });
-        }
-
-        return res.status(200).json({ success: true, data: deletedPost });
-      } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, message: "Internal Server Error" });
-      }
-      break;
-
     default:
       res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
-      return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
+      res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
   }
 };
 
