@@ -52,12 +52,13 @@ const Posts = () => {
                 <td className="border border-gray-300 p-2">{new Date(post.post_date).toLocaleDateString()}</td> {/* Format date */}
                 <td className="border border-gray-300 p-2">{post.author}</td>
                 <td className="border border-gray-300 p-2">
-                  <Link href={`/edit-post?id=${post._id}`}>
+
+                  <Link href={`/admin/editPost/${post._id}`}>
                     <button className="text-blue-600 hover:underline">Edit</button>
                   </Link>
                 </td>
                 <td className="border border-gray-300 p-2">
-                  <Link href={`/delete-post?id=${post._id}`}>
+                  <Link href={`/admin/deletePost/${post._id}`}>
                     <button className="text-red-600 hover:underline">Delete</button>
                   </Link>
                 </td>

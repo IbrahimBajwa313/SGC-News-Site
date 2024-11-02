@@ -50,58 +50,60 @@ const EditUser = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Modify User Details</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="form-group">
-          <label className="block font-medium">First Name</label>
-          <input
-            type="text"
-            name="first_name"
-            value={user.first_name} // Bind value to state
-            onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label className="block font-medium">Last Name</label>
-          <input
-            type="text"
-            name="last_name"
-            value={user.last_name} // Bind value to state
-            onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label className="block font-medium">Username</label>
-          <input
-            type="text"
-            name="username"
-            value={user.username} // Bind value to state
-            onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label className="block font-medium">User Role</label>
-          <select
-            name="role"
-            value={user.role} // Bind value to state
-            onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-          >
-            <option value="0">Normal User</option>
-            <option value="1">Admin</option>
-          </select>
-        </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded-lg w-full">
-          Update
-        </button>  
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-3xl">
+        <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">Modify User Details</h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="form-group">
+            <label className="block font-medium text-gray-700">First Name</label>
+            <input
+              type="text"
+              name="first_name"
+              value={user.first_name}
+              onChange={handleChange}
+              className="mt-1 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="block font-medium text-gray-700">Last Name</label>
+            <input
+              type="text"
+              name="last_name"
+              value={user.last_name}
+              onChange={handleChange}
+              className="mt-1 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="block font-medium text-gray-700">Username</label>
+            <input
+              type="text"
+              name="username"
+              value={user.username}
+              onChange={handleChange}
+              className="mt-1 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="block font-medium text-gray-700">User Role</label>
+            <select
+              name="role"
+              value={user.role}
+              onChange={handleChange}
+              className="mt-1 p-3 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-400"
+            >
+              <option value="0">Normal User</option>
+              <option value="1">Admin</option>
+            </select>
+          </div>
+          <button type="submit" className="bg-blue-500 text-white p-3 rounded-lg w-full hover:bg-blue-600 transition duration-300">
+            Update
+          </button>  
+        </form>
+      </div>
     </div>
   );
 };
