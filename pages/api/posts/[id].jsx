@@ -1,5 +1,5 @@
-import connectDB from "../../middleware/mongoose";
-import User from "../../../models/User";
+import connectDB from "../../middleware/mongoose"; 
+import Post from "../../../models/Post";
 
 const handler = async (req, res) => {
   const { id } = req.query;
@@ -7,28 +7,28 @@ const handler = async (req, res) => {
   switch (req.method) {
     case "GET":
       try {
-        const user = await User.findById(id);
-        if (!user) {
-          return res.status(404).json({ success: false, message: "User not found" });
+        const post = await Post.findById(id);
+        if (!post) {
+          return res.status(404).json({ success: false, message: "Post not found" });
         }
-        res.status(200).json({ success: true, data: user });
+        res.status(200).json({ success: true, data: post });
       } catch (error) {
         res.status(500).json({ success: false, message: error.message });
       }
       break;
 
     case "PUT":
-      const { first_name, last_name, username, role } = req.body;
+      const { title, description, category, post_img } = req.body;
       try {
-        const user = await User.findByIdAndUpdate(
+        const updatedPost = await Post.findByIdAndUpdate(
           id,
-          { first_name, last_name, username, role },
+          { title, description, category, post_img },
           { new: true }
         );
-        if (!user) {
-          return res.status(404).json({ success: false, message: "User not found" });
+        if (!updatedPost) {
+          return res.status(404).json({ success: false, message: "Post not found" });
         }
-        res.status(200).json({ success: true, data: user });
+        res.status(200).json({ success: true, data: updatedPost });
       } catch (error) {
         res.status(500).json({ success: false, message: error.message });
       }
@@ -36,19 +36,16 @@ const handler = async (req, res) => {
 
     case "DELETE":
       try {
-        // Check if the ID is provided
         if (!id) {
-          return res.status(400).json({ success: false, message: "User ID is required" });
+          return res.status(400).json({ success: false, message: "Post ID is required" });
         }
 
-        // Delete the user from the database
-        const deletedUser = await User.findByIdAndDelete(id);
-
-        if (!deletedUser) {
-          return res.status(404).json({ success: false, message: "User not found" });
+        const deletedPost = await Post.findByIdAndDelete(id);
+        if (!deletedPost) {
+          return res.status(404).json({ success: false, message: "Post not found" });
         }
 
-        return res.status(200).json({ success: true, data: deletedUser });
+        return res.status(200).json({ success: true, data: deletedPost });
       } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: "Internal Server Error" });
