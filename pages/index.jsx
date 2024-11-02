@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Loader from "../components/Loader";
+import Wrapper from "../components/Wrapper";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -27,40 +28,42 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-center mb-8 text-gray-900">Latest News</h1>
-      {loading ? (
-        <Loader />  // Use the Loader component here
-      ) : (
-        <div className="grid grid-cols-1 gap-6">
-          {posts.length === 0 ? (
-            <p className="text-center text-gray-500 font-bold">No posts available.</p>
-          ) : (
-            posts.map((post) => (
-              <div key={post._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="md:flex">
-                  <div className="md:flex-shrink-0">
-                    <img className="h-48 w-full object-cover md:w-48" src={`/uploads/${post.post_img}`} alt={post.title} />
+    <div className="bg-gray-100 min-h-screen py-12">
+      <div className="container mx-auto px-4">
+        <h1 className="text-5xl font-extrabold text-center mb-10 text-gray-800">Save Gaza News</h1>
+        {loading ? (
+          <Loader /> 
+        ) : (
+            <Wrapper>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.length === 0 ? (
+              <p className="text-center text-gray-500 font-bold">No posts available.</p>
+            ) : (
+              posts.map((post) => (
+                <div key={post._id} className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden">
+                  <div className="relative">
+                    <img className="h-56 w-full object-cover" src={`/uploads/${post.post_img}`} alt={post.title} />
+                    <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs font-bold uppercase px-4 py-2 rounded-br-lg">{post.category}</div>
                   </div>
                   <div className="p-6">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2 hover:text-blue-500 transition">
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-3 hover:text-blue-500 transition-colors duration-300">
                       {post.title}
                     </h2>
                     <p className="text-sm text-gray-500 mb-4">
-                      <span className="font-semibold">{post.category}</span> | <span>{post.author}</span> |{' '}
-                      <span>{new Date(post.post_date).toLocaleDateString()}</span>
+                      By <span className="font-semibold">{post.author}</span> | <span>{new Date(post.post_date).toLocaleDateString()}</span>
                     </p>
-                    <p className="text-gray-700 mb-4">{post.description.slice(0, 100)}...</p>
+                    <p className="text-gray-700 leading-relaxed mb-4">{post.description.slice(0, 120)}...</p>
                     <Link href={`/post/${post._id}`} className="text-blue-600 hover:text-blue-800 font-semibold">
-                      Read more
+                      Read more →
                     </Link>
                   </div>
                 </div>
-              </div>
-            ))
-          )}
-        </div>
-      )}
+              ))
+            )}
+          </div>
+            </Wrapper>
+        )}
+      </div>
     </div>
   );
 }
