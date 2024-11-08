@@ -1,4 +1,3 @@
-// pages/postDesription/[id]
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -6,26 +5,30 @@ import Loader from "../../components/Loader";
 
 export default function PostPage() {
   const router = useRouter();
-  const { postId } = router.query;
+  const [postId, setPostId] = useState(null);
   const [post, setPost] = useState(null);
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Extract postId from the URL path if router.query is undefined
+    const idFromPath = router.asPath.split("/").pop();
+    if (!postId && idFromPath) {
+      setPostId(idFromPath);
+    }
+  }, [router.asPath, postId]);
 
+  useEffect(() => {
     if (!postId) return;
 
     const fetchPost = async () => {
       try {
-        if (postId) { 
-          const response = await fetch(`/api/getPostById/${postId}`);
-          console.log("hahahaha");
-          const data = await response.json();
-          if (data.success) {
-            setPost(data.data);
-          } else {
-            console.error("Failed to fetch post:", data.message);
-          }
+        const response = await fetch(`/api/getPostById/${postId}`);
+        const data = await response.json();
+        if (data.success) {
+          setPost(data.data);
+        } else {
+          console.error("Failed to fetch post:", data.message);
         }
       } catch (error) {
         console.error("Fetch error:", error);
@@ -48,31 +51,15 @@ export default function PostPage() {
       }
     };
 
-    if (postId) {
-      fetchPost();
-      fetchAllPosts();
-    }
+    fetchPost();
+    fetchAllPosts();
   }, [postId]);
 
   if (loading) return <Loader />;
 
   return (
     <div className="container mx-auto px-4 py-8 flex space-x-8">
-      {/* Sidebar */}
-      <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
-        <h2 className="text-xl font-bold mb-4">All Posts</h2>
-        <ul className="space-y-2">
-          {allPosts.map((item) => (
-            <li key={item._id}>
-              <Link href={`/postDescription/${item._id}`}>
-                <a className="text-blue-600 hover:underline">{item.title}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </aside>
 
-      {/* Selected Post */}
       <main className="flex-1 bg-white rounded-lg shadow p-8">
         {post ? (
           <>
@@ -91,6 +78,19 @@ export default function PostPage() {
           <p className="text-center text-gray-500 font-bold">Post not found.</p>
         )}
       </main>
+      
+      <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
+        <h2 className="text-xl font-bold mb-4">All Posts</h2>
+        <ul className="space-y-2">
+          {allPosts.map((item) => (
+            <li key={item._id}>
+              <Link href={`/postDescription/${item._id}`}>
+                <span className="text-blue-600 hover:underline">{item.title}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </aside>
     </div>
   );
 }
