@@ -54,41 +54,43 @@ const Sidebar = () => {
         </form>
       </div>
 
-      {/* Recent Posts */}
+      {/* Recent Posts with Scrollable Area */}
       <div>
         <h4 className="text-xl font-bold mb-4 text-gray-900">Recent Posts</h4>
-        {posts.map((post) => (
-          <div key={post._id} className="flex items-start mb-4">
-            <Link href={`/postDescription/${post._id}`} passHref>
-              <div className="block w-16 h-16 overflow-hidden rounded-md shadow-lg relative cursor-pointer">
-                {/* <Image
-                  src={post.post_img}
-                  alt={post.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-md"
-                /> */}
-              </div>
-            </Link>
-            <div className="ml-4">
-              <h5 className="text-md font-semibold text-gray-800 hover:text-blue-600 transition">
-                <Link href={`/postDescription/${post._id}`}>{post.title}</Link>
-              </h5>
-              <div className="text-sm text-gray-500">
-                <span className="mr-2 flex items-center">
-                  <i className="fa fa-tags mr-1"></i>
-                  <Link href={`/category/${post.category.toLowerCase()}`}>
-                    <span className="hover:underline">{post.category}</span>
-                  </Link>
-                </span>
-                <span className="flex items-center">
-                  <i className="fa fa-calendar mr-1"></i>
-                  {post.post_date}
-                </span>
+        <div className="max- h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
+          {posts.map((post) => (
+            <div key={post._id} className="flex items-start mb-4">
+              <Link href={`/postDescription/${post._id}`} passHref>
+                <div className="block w-16 h-16 overflow-hidden rounded-md shadow-lg relative cursor-pointer">
+                  <Image
+                    src={`/uploads/${post.post_img}`}
+                    alt={post.title}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-md"
+                  />
+                </div>
+              </Link>
+              <div className="ml-4">
+                <h5 className="text-sm font-semibold text-gray-800 hover:text-blue-600 transition">
+                  <Link href={`/postDescription/${post._id}`}>{post.title}</Link>
+                </h5>
+                <div className="text-sm text-gray-500">
+                  <span className="mr-2 flex items-center">
+                    <i className="fa fa-tags mr-1"></i>
+                    <Link href={`/category/${post.category.toLowerCase()}`}>
+                      <span className="hover:underline">{post.category}</span>
+                    </Link>
+                  </span>
+                  {/* <span className=" flex items-center">
+                    <i className="fa fa-calendar mr-1"></i>
+                    {post.post_date}
+                  </span> */}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
