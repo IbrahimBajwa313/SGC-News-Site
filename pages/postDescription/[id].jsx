@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Loader from "../../components/Loader";
+import Sidebar from "../../components/Sidebar";
 
 export default function PostPage() {
   const router = useRouter();
@@ -80,16 +81,7 @@ export default function PostPage() {
       </main>
       
       <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
-        <h2 className="text-xl font-bold mb-4">All Posts</h2>
-        <ul className="space-y-2">
-          {allPosts.map((item) => (
-            <li key={item._id}>
-              <Link href={`/postDescription/${item._id}`}>
-                <span className="text-blue-600 hover:underline">{item.title}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Sidebar />
       </aside>
     </div>
   );
