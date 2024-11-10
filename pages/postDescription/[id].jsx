@@ -62,29 +62,33 @@ export default function PostPage() {
   return (
     <div className="container mx-auto px-4 py-8 flex space-x-8">
       <main className="flex-1 bg-white rounded-lg shadow p-8">
-        {post ? (
-          <>
-            <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+  {post ? (
+    <>
+      <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
 
-            <div className="relative w-s creen h-screen">
-            <Image
-              src={`/uploads/${post.post_img}`}
-              alt={post.title}
-              width={800} // Width in pixels
-              height={300} // Height in pixels (4:6 ratio with width 200)
-              className="rounded-md mb-4 object-cover"
-            />
-            </div>
-            <p className="text-sm text-gray-500 mb-4">
-              By <span className="font-semibold">{post.author}</span> |{" "}
-              <span>{new Date(post.post_date).toLocaleDateString()}</span>
-            </p>
-            <p className="text-gray-700 leading-relaxed">{post.description}</p>
-          </>
-        ) : (
-          <p className="text-center text-gray-500 font-bold">Post not found.</p>
-        )}
-      </main>
+      {/* Image Container */}
+<div className="relative w-full h-96 mb-8 overflow-hidden rounded-md shadow-lg">
+  <Image
+    src={`/uploads/${post.post_img}`}
+    alt={post.title}
+    layout="fill"                // Makes the image fill the parent container
+    objectFit="cover"            // Ensures the image covers the area without distortion
+    className="rounded-md"       // Adds rounded corners
+  />
+</div>
+
+
+      <p className="text-sm text-gray-500 mb-4">
+        By <span className="font-semibold">{post.author}</span> |{" "}
+        <span>{new Date(post.post_date).toLocaleDateString()}</span>
+      </p>
+      <p className="text-gray-700 leading-relaxed">{post.description}</p>
+    </>
+  ) : (
+    <p className="text-center text-gray-500 font-bold">Post not found.</p>
+  )}
+</main>
+
 
       <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
         <Sidebar />
