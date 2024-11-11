@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 const Sidebar = () => {
   const [posts, setPosts] = useState([]);
@@ -8,15 +8,15 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('/api/getPosts');
+        const response = await fetch("/api/getPosts");
         const data = await response.json();
         if (data.success && Array.isArray(data.data)) {
           setPosts(data.data);
         } else {
-          console.error('Expected an array of posts but received:', data);
+          console.error("Expected an array of posts but received:", data);
         }
       } catch (error) {
-        console.error('Fetch error:', error);
+        console.error("Fetch error:", error);
       }
     };
 
@@ -24,11 +24,11 @@ const Sidebar = () => {
   }, []);
 
   // For handling the search input (this will eventually submit to the backend)
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
+    console.log("Searching for:", searchQuery);
   };
 
   return (
@@ -60,7 +60,8 @@ const Sidebar = () => {
         <div className="max- h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
           {posts.map((post) => (
             <div key={post._id} className="flex items-start mb-4">
-              <Link href={`/postDescription/${post._id}`} passHref>
+              <Link href={`/postDescription/${post._id}`}>
+                
                 <div className="block w-16 h-16 overflow-hidden rounded-md shadow-lg relative cursor-pointer">
                   <Image
                     src={`/uploads/${post.post_img}`}
@@ -73,7 +74,9 @@ const Sidebar = () => {
               </Link>
               <div className="ml-4">
                 <h5 className="text-sm font-semibold text-gray-800 hover:text-blue-600 transition">
-                  <Link href={`/postDescription/${post._id}`}>{post.title}</Link>
+                  <Link href={`/postDescription/${post._id}`}>
+                    {post.title}
+                  </Link>
                 </h5>
                 <div className="text-sm text-gray-500">
                   <span className="mr-2 flex items-center">
