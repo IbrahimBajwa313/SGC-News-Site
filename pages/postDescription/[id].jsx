@@ -87,10 +87,7 @@ export default function PostPage() {
           </>
         ) : (
           <p className="text-center text-gray-500 font-bold">Post not found.</p>
-        )}
-        {/* <Wrapper>
-          <PostCard />
-        </Wrapper> */}
+        )} 
       </main>
 
       <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
