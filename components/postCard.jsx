@@ -1,7 +1,35 @@
 // components/PostCard.js
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import Loader from "./Loader";
 
-export default function PostCard({ post }) {
+export default function PostCard({ postId }) {
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(`/api/getPost/${postId}`);
+        const data = await response.json();
+        if (data.success) {
+          setPost(data.data);
+        } else {
+          console.error('Failed to fetch post:', data.message);
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPost();
+  }, [postId]);
+
+  if (loading) return <Loader />;
+  if (!post) return <p className="text-center text-gray-500 font-bold">Post not found.</p>;
+
   return (
     <div className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden">
       <Link href={`/postDescription/${post._id}`} className="text-blue-600 hover:text-blue-800 font-semibold">
