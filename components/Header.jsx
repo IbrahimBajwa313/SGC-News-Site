@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import ListItem from "./listItem";
+import Image from "next/image";
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -42,10 +43,12 @@ export default function Header() {
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <div className="text-2xl font-bold flex items-center">
-            <img
-              src="./save-gaza-logo.png"
+            <Image
+              src="/save-gaza-logo.png"
               alt="Studio Logo"
               className="h-12 w-12"
+              height = {100}
+              width= {100}
             />
             <span className="ml-4">Save Gaza Campaign</span>
           </div>
