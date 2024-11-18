@@ -6,4 +6,7 @@ const categorySchema = new Schema({
   post: { type: Number, default: 0 }
 });
 
-module.exports = mongoose.model('Category', categorySchema);
+// Check if the model is already defined, to prevent overwriting
+const Category = mongoose.models.Category || mongoose.model('Category', categorySchema);
+
+module.exports = Category;
