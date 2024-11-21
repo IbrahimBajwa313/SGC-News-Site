@@ -64,23 +64,23 @@ export default function Header() {
             </Link>
             <Link href="#">
               <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
-                Modern
+                Category
               </span>
             </Link>
             <Link href="#">
               <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
-                Contemporary
+                Join Us
               </span>
             </Link>
             <Link href="#">
               <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
-                Affordable
+                About Us
               </span>
             </Link>
           </span>
 
           {/* Login Button */}
-          <button className="hidden md:flex bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors duration-300">
+          <button className="hidden md:flex bg-white hover:bg-gray-100 text-black font-bold px-4 py-2 rounded-md transition-colors duration-300">
             Login
           </button>
           <span
