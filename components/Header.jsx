@@ -1,146 +1,192 @@
 import { useState } from "react";
 import Link from "next/link";
-import ListItem from "./listItem";
 import Image from "next/image";
 
 export default function Header() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isIconClicked, setIsIconClicked] = useState(false);
-  const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
-  const [isIconClicked2, setIsIconClicked2] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
+  const [isAuthorsDropdownOpen, setIsAuthorsDropdownOpen] = useState(false);
+  const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] = useState(false);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-    setIsIconClicked(!isIconClicked);
-    setIsDropdownOpen2(false);
-    setIsIconClicked2(false);
-  };
-  const toggleDropdown2 = () => {
-    setIsDropdownOpen2(!isDropdownOpen2);
-    setIsIconClicked2(!isIconClicked2);
-    setIsDropdownOpen(false);
-    setIsIconClicked(false);
+  const toggleAuthorsDropdown = () => {
+    setIsAuthorsDropdownOpen(!isAuthorsDropdownOpen);
+    setIsCategoriesDropdownOpen(false); // Close the other dropdown
   };
 
-  const handleToggle = () => {
-    setIsToggled(!isToggled);
+  const toggleCategoriesDropdown = () => {
+    setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen);
+    setIsAuthorsDropdownOpen(false); // Close the other dropdown
   };
 
-  const items1 = ["Option 1", "Option 2", "Option 3"];
-  const items2 = ["Latest", "Modern", "Contemporary"];
-  const list1 = items1.map((item, index, url) => {
-    return <ListItem key={index} itemName={item} url={url} />;
-  });
-  const list2 = items2.map((item, index, url) => {
-    return <ListItem key={index} itemName={item} url={url} />;
-  });
+  const authorsList = ["Author", "Author", "Author"];
+  const categoriesList = ["Category", "Category", "Category"];
 
   return (
-    <header
-      className={`bg-[#111] text-white flex flex-col px-6 py-6 shadow-2xl z-50 transition-all duration-900 ease-in-out ${isDropdownOpen || isDropdownOpen2 ? "max-h-[1000px]" : "max-h-[90px]"}`}
-    >
-      <div className="flex justify-between items-center">
+    <header className="bg-[#111] text-white shadow-2xl z-50">
+      <div className="flex justify-between items-center px-6 py-4">
+
+        {/* Logo */}
+        <Link href={"/"}>
         <div className="flex items-center space-x-4">
-          <div className="text-2xl font-bold flex items-center">
-            <Image
-              src="/save-gaza-logo.png"
-              alt="Studio Logo"
-              className="h-12 w-12"
-              height = {100}
-              width= {100}
-            />
-            <span className="ml-4">Save Gaza Campaign</span>
-          </div>
+          <Image
+            src="/save-gaza-logo.png"
+            alt="Save Gaza Campaign Logo"
+            className="h-12 w-12"
+            height={48}
+            width={48}
+          />
+          <span className="text-2xl font-bold hover:text-green-500">Save Gaza Campaign</span>
         </div>
+        </Link>
 
-        <nav className="flex items-center space-x-8">
-          {/* Navigation Links */}
-          <span className="hidden md:flex items-center space-x-8">
-            <Link href="#">
-              <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
-                Latest
-              </span>
-            </Link>
-            <Link href="#">
-              <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
-                Category
-              </span>
-            </Link>
-            <Link href="#">
-              <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
-                Join Us
-              </span>
-            </Link>
-            <Link href="#">
-              <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
-                About Us
-              </span>
-            </Link>
-          </span>
+        {/* Navigation */}
+        <nav className="hidden md:flex items-center space-x-8">
+          {/* Authors Dropdown */}
+          <div className="relative">
+            <button
+              onClick={toggleAuthorsDropdown}
+              className="hover:text-green-500 transition-colors duration-300 flex items-center"
+            >
+              Authors
+              <svg
+                className={`ml-2 transition-transform duration-300 ${
+                  isAuthorsDropdownOpen ? "rotate-180" : "rotate-0"
+                }`}
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            {isAuthorsDropdownOpen && (
+              <div className="absolute left-0 mt-2 bg-[#222] p-4 rounded shadow-lg">
+                {authorsList.map((author, index) => (
+                  <Link
+                    key={index}
+                    href="#"
+                    className="block text-white hover:text-green-500 mb-2"
+                  >
+                    {author}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
 
-          {/* Login Button */}
-          <button className="hidden md:flex bg-white hover:bg-gray-100 text-black font-bold px-4 py-2 rounded-md transition-colors duration-300">
+          {/* Categories Dropdown */}
+          <div className="relative">
+            <button
+              onClick={toggleCategoriesDropdown}
+              className="hover:text-green-500 transition-colors duration-300 flex items-center"
+            >
+              Categories
+              <svg
+                className={`ml-2 transition-transform duration-300 ${
+                  isCategoriesDropdownOpen ? "rotate-180" : "rotate-0"
+                }`}
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            {isCategoriesDropdownOpen && (
+              <div className="absolute left-0 mt-2 bg-[#222] p-4 rounded shadow-lg">
+                {categoriesList.map((category, index) => (
+                  <Link
+                    key={index}
+                    href="#"
+                    className="block text-white hover:text-green-500 mb-2"
+                  >
+                    {category}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Other Links */}
+          <Link href="#">
+            <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
+              Latest
+            </span>
+          </Link>
+          <Link href="#">
+            <span className="hover:text-green-500 cursor-pointer transition-colors duration-300">
+              Join Us
+            </span>
+          </Link>
+          <button className="bg-white hover:text-green-500 text-black font-bold px-4 py-2 rounded-md transition-colors duration-300">
             Login
           </button>
-          <span
-            className={`mr-2 cursor-pointer flex md:hidden ${isIconClicked2 ? "text-green-500" : "text-white"} hover:text-green-500 transition-colors duration-300`}
-            onClick={toggleDropdown2}
-          >
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect x="3" y="5" width="18" height="2" fill="currentColor" />
-              <rect x="7" y="11" width="14" height="2" fill="currentColor" />
-              <rect x="11" y="17" width="10" height="2" fill="currentColor" />
-            </svg>
-          </span>
         </nav>
+
+        {/* Mobile Menu Icon */}
+        <div className="flex md:hidden cursor-pointer" onClick={toggleAuthorsDropdown}>
+          <svg
+            className="w-8 h-8 text-white"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M4 6h16M4 12h16M4 18h16"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
       </div>
 
-      <div
-        className={`transition-all duration-300 ease-in-out ${isDropdownOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}
-      >
-        <div className="mt-4 bg-[#222] p-4 rounded-xl">
-          <p className="text-xl mb-2">Services</p>
-          {list1}
-        </div>
-      </div>
-      <div
-        className={`transition-all duration-300 ease-in-out ${isDropdownOpen2 ? "max-h-70 opacity-100" : "max-h-0 opacity-0 overflow-hidden"}`}
-      >
-        <div className="mt-4 bg-[#222] p-4 rounded-xl">
-          <p className="text-xl mb-2">Check</p>
-          {list2}
-          <div
-            onClick={handleToggle}
-            className="flex items-center cursor-pointer"
-          >
-            <p className="text-xl mt-2 mb-2">Services</p>
-            <svg
-              className={`ml-2 transition-transform duration-300 ${isToggled ? "rotate-180" : "rotate-0"}`}
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 9l6 6 6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+      {/* Mobile Dropdown */}
+      {isAuthorsDropdownOpen && (
+        <div className="md:hidden bg-[#222] px-6 py-4 space-y-4">
+          {/* Authors */}
+          <div>
+            <p className="text-lg font-bold">Authors</p>
+            {authorsList.map((author, index) => (
+              <Link
+                key={index}
+                href="#"
+                className="block text-white hover:text-green-500"
+              >
+                {author}
+              </Link>
+            ))}
           </div>
-          {isToggled && list1}
+          {/* Categories */}
+          <div className="mt-4">
+            <p className="text-lg font-bold">Categories</p>
+            {categoriesList.map((category, index) => (
+              <Link
+                key={index}
+                href="#"
+                className="block text-white hover:text-green-500"
+              >
+                {category}
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }
