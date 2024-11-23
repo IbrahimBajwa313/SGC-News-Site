@@ -1,12 +1,20 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import PostCard from "./postCard";
 
 export default function Header() {
   const [isAuthorsDropdownOpen, setIsAuthorsDropdownOpen] = useState(false);
-  const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] = useState(false);
+  const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] =
+    useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [authorsList, setAuthorsList] = useState([]);
+  const [selectedAuthor, setSelectedAuthor] = useState(null); // Track selected author
+
+  const handleAuthorSelect = (author) => {
+    setSelectedAuthor(author); // Set selected author
+    setIsAuthorsDropdownOpen(false); // Close dropdown
+  };
 
   const toggleAuthorsDropdown = () => {
     setIsAuthorsDropdownOpen(!isAuthorsDropdownOpen);
@@ -24,7 +32,6 @@ export default function Header() {
     setIsCategoriesDropdownOpen(false);
   };
 
-  
   // Fetch authors from the API
   useEffect(() => {
     const fetchAuthors = async () => {
@@ -35,9 +42,7 @@ export default function Header() {
         if (result.success) {
           // Extract unique authors
           const authors = [
-            ...new Set(
-              result.data.map((post) => post.authorDetails.username)
-            ),
+            ...new Set(result.data.map((post) => post.authorDetails.username)),
           ];
           setAuthorsList(authors);
         }
@@ -101,13 +106,13 @@ export default function Header() {
               <div className="absolute left-0 mt-2 bg-[#222] p-4 rounded shadow-lg">
                 {authorsList.length > 0 ? (
                   authorsList.map((author, index) => (
-                    <Link
+                    <button
                       key={index}
-                      href="#"
+                      onClick={() => handleAuthorSelect(author)}
                       className="block px-2 text-white hover:text-green-500 mb-2"
                     >
                       {author}
-                    </Link>
+                    </button>
                   ))
                 ) : (
                   <span className="text-gray-400">No authors found</span>
@@ -174,7 +179,10 @@ export default function Header() {
         </nav>
 
         {/* Mobile Menu Icon */}
-        <div className="flex md:hidden cursor-pointer" onClick={toggleMobileMenu}>
+        <div
+          className="flex md:hidden cursor-pointer"
+          onClick={toggleMobileMenu}
+        >
           <svg
             className="w-8 h-8 text-white"
             fill="none"
@@ -225,10 +233,10 @@ export default function Header() {
               <div className="mt-2">
                 {authorsList.map((author, index) => (
                   <Link
-                  key={index}
-                  href="#"
-                  className="block px-4 py-2 text-white hover:text-green-500 hover:bg-[#333] rounded"
-                >
+                    key={index}
+                    href="#"
+                    className="block px-4 py-2 text-white hover:text-green-500 hover:bg-[#333] rounded"
+                  >
                     {author}
                   </Link>
                 ))}
@@ -266,10 +274,10 @@ export default function Header() {
               <div className="mt-2">
                 {categoriesList.map((category, index) => (
                   <Link
-                  key={index}
-                  href="#"
-                  className="block px-4 py-2 text-white hover:text-green-500 hover:bg-[#333] rounded"
-                >
+                    key={index}
+                    href="#"
+                    className="block px-4 py-2 text-white hover:text-green-500 hover:bg-[#333] rounded"
+                  >
                     {category}
                   </Link>
                 ))}
@@ -295,6 +303,9 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      {/* Pass selectedAuthor to PostCard */}
+      <PostCard selectedAuthor={selectedAuthor} />
     </header>
   );
 }
