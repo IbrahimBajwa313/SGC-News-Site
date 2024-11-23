@@ -20,7 +20,7 @@ const Posts = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4 min-h-screen mt-20">
+    <div className="container mx-auto p-4 px-20 min-h-screen mt-20">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">All Posts</h1>
         <Link href="/admin/addPost">
