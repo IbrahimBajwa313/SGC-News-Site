@@ -26,27 +26,11 @@ export default function PostCard({ selectedAuthor }) {
 
     fetchPosts();
   }, []);
-
-  // Filter posts by selected author, if any
-  const filteredPosts = selectedAuthor
-    ? posts.filter((post) => post.authorDetails.username === selectedAuthor)
-    : posts;
-
-  if (loading) return <Loader />;
-
-  if (filteredPosts.length === 0) {
-    return (
-      <p className="text-center text-gray-500 font-bold">
-        {selectedAuthor ? `No posts available for author: ${selectedAuthor}` : "No posts available."}
-      </p>
-    );
-  }
- 
   
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {filteredPosts.map((post) =>
+      {posts.map((post) =>
         post && post._id ? (
           <div
             key={post._id}
