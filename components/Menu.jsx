@@ -80,7 +80,7 @@ const Menu = ({
                       categories.slice(0, 5).map((name, index) => (
                         <a
                           key={index}
-                          href={`/services/${name}`}
+                          href={`/services/${item.name}`}
                           onClick={() => setShowCatMenu(false)}
                         >
                           <li className="cursor-pointer flex justify-between items-center px-3 hover:shadow-sm hover:bg-gray-100 rounded-md">

@@ -1,139 +1,92 @@
-import Sidebar from '@/components/Sidebar';
-import { useRouter } from 'next/router'; 
-
-// Hardcoded author and post data
-const authors = {
-  1: {
-    username: "JohnDoe",
-    posts: [
-      {
-        post_id: 1,
-        title: "The Future of AI",
-        description: "AI is transforming the world in various industries, from healthcare to finance. This post explores...",
-        post_img: "sample-image.jpg",
-        post_date: "2024-10-12",
-        category_name: "Technology",
-        category_id: 1,
-      },
-      {
-        post_id: 2,
-        title: "Quantum Computing 101",
-        description: "Quantum computing is set to revolutionize problem-solving. Learn how it works and what the future holds...",
-        post_img: "sample-image.jpg",
-        post_date: "2024-09-25",
-        category_name: "Technology",
-        category_id: 1,
-      },
-    ],
-  },
-  2: {
-    username: "JaneSmith",
-    posts: [
-      {
-        post_id: 3,
-        title: "The Importance of Sleep",
-        description: "Sleep is crucial for physical and mental well-being. Learn how to improve your sleep hygiene...",
-        post_img: "sample-image.jpg",
-        post_date: "2024-09-10",
-        category_name: "Health",
-        category_id: 2,
-      },
-    ],
-  },
-};
+// pages/authors/[id].js
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Loader from "@/components/Loader";
+import { useRouter } from "next/router";
 
 export default function AuthorPage() {
   const router = useRouter();
-  const { aid, page = 1 } = router.query;
-  const limit = 3;
-  const offset = (page - 1) * limit;
-  
-  // Get the author data based on aid
-  const author = authors[aid];
+  const { id } = router.query;
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // If the author doesn't exist, show a fallback message
-  if (!author) {
-    return <p>Author not found</p>;
+  useEffect(() => {
+    if (!id) return; // Avoid fetching if 'id' is undefined
+  
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch(`/api/getPosts?authorId=${id}`);
+        const data = await response.json();
+        if (data.success && Array.isArray(data.data)) {
+          setPosts(data.data);
+        } else {
+          console.error("Expected an array of posts but received:", data);
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchPosts();
+  }, [id]);
+  
+
+  if (loading) return <Loader />;
+
+  if (posts.length === 0) {
+    return (
+      <p className="text-center text-gray-500 font-bold">
+        No posts available for the selected author.
+      </p>
+    );
   }
 
-  const posts = author.posts.slice(offset, offset + limit);
-  const totalPosts = author.posts.length;
-  const totalPages = Math.ceil(totalPosts / limit);
-
   return (
-    <div> 
-      <div className="container mx-auto p-4">
-        <div className="row flex">
-          <div className="col-md-8 w-full">
-            <h2 className="page-heading">Author Name: {author.username}</h2>
+    <div className="container mx-auto py-10">
+      <h1 className="text-3xl font-bold mb-8">Posts by the Selected Author</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post) =>
+          post && post._id ? (
+            <div
+            key={post._id}
+            className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden"
+          >
+            <div className="relative">
+              <img
+                className="h-72 w-full object-cover"
+                src={`/uploads/${post.post_img}`}
+                alt={post.title}
+              />
+              <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs font-bold uppercase px-4 py-2 rounded-br-lg">
+                {post.category}
+              </div>
+            </div>
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-3 hover:text-blue-500 transition-colors duration-300">
+                {post.title}
+              </h2>
+              <p className="text-sm text-gray-500 mb-4">
+                By{" "}
+                <span className="font-semibold">
+                  {post.authorDetails.username}
+                </span>{" "}
+                | <span>{new Date(post.post_date).toLocaleDateString()}</span>
+              </p>
 
-            {/* Post List */}
-            {posts.length > 0 ? (
-              posts.map((post) => (
-                <div key={post.post_id} className="post-container">
-                  <div className="post-content flex mb-6">
-                    <div className="col-md-4">
-                      <a href={`/post/${post.post_id}`}>
-                        <img
-                          src={`/admin/upload/${post.post_img}`}
-                          alt={post.title}
-                          className="w-full h-48 object-cover rounded-lg"
-                        />
-                      </a>
-                    </div>
-                    <div className="col-md-8 px-4">
-                      <h3 className="text-xl font-semibold">
-                        <a href={`/post/${post.post_id}`}>{post.title}</a>
-                      </h3>
-                      <div className="post-information text-gray-500 my-2">
-                        <span>
-                          <i className="fa fa-tags"></i> {post.category_name}
-                        </span>
-                        <span className="ml-4">
-                          <i className="fa fa-calendar"></i> {post.post_date}
-                        </span>
-                      </div>
-                      <p className="description">
-                        {post.description.slice(0, 150)}...
-                      </p>
-                      <a className="text-blue-500 hover:underline" href={`/post/${post.post_id}`}>
-                        Read more
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No records found</p>
-            )}
-
-            {/* Pagination */}
-            {totalPosts > limit && (
-              <ul className="pagination admin-pagination">
-                {page > 1 && (
-                  <li>
-                    <a href={`/author/${aid}?page=${Number(page) - 1}`}>Prev</a>
-                  </li>
-                )}
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <li key={i + 1} className={i + 1 === Number(page) ? "active" : ""}>
-                    <a href={`/author/${aid}?page=${i + 1}`}>{i + 1}</a>
-                  </li>
-                ))}
-                {page < totalPages && (
-                  <li>
-                    <a href={`/author/${aid}?page=${Number(page) + 1}`}>Next</a>
-                  </li>
-                )}
-              </ul>
-            )}
+              <p className="text-gray-700 leading-relaxed mb-4">
+                {post.description.slice(0, 120)}...
+              </p>
+            </div>
           </div>
-  
-          <div className="w-full md:w-1/3 mt-8 md:mt-0">
-        <Sidebar />
+          ) : (
+            <p key={Math.random()} className="text-red-500 font-bold">
+              Invalid post data
+            </p>
+          )
+        )}
       </div>
-        </div>
-      </div> 
     </div>
   );
 }
