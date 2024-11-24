@@ -37,12 +37,12 @@ const PostDetails = () => {
   if (!post) return <p className="text-center text-red-500">Post not found</p>;
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 ">
        <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
         <Sidebar />
       </aside>
 
-      <div className="flex-grow p-8">
+      <div className="flex-grow p-8 w-1/3 overflow-auto">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <img
             src={`/uploads/${post.post_img}`}
