@@ -37,12 +37,14 @@ const PostDetails = () => {
   if (!post) return <p className="text-center text-red-500">Post not found</p>;
 
   return (
-    <div className="flex min-h-screen bg-gray-100 ">
-       <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
         <Sidebar />
       </aside>
 
-      <div className="flex-grow p-8 w-1/3 overflow-auto">
+      {/* Main Content with Invisible Scrollbar */}
+      <div className="flex-grow p-8 w-2/3 overflow-y-auto scrollbar-none">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <img
             src={`/uploads/${post.post_img}`}
@@ -55,7 +57,9 @@ const PostDetails = () => {
             </h1>
             <p className="text-gray-500 mb-4">
               By{" "}
-              <span className="font-semibold">{post.authorDetails.username}</span>{" "}
+              <span className="font-semibold">
+                {post.authorDetails.username}
+              </span>{" "}
               | {new Date(post.post_date).toLocaleDateString()}
             </p>
             <p className="text-gray-700 leading-relaxed">{post.description}</p>
