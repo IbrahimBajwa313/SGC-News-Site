@@ -27,7 +27,7 @@ export default function PostCard({ selectedAuthor }) {
     fetchPosts();
   }, []);
   
-
+  if (loading) return <Loader />;
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {posts.map((post) =>
@@ -36,6 +36,7 @@ export default function PostCard({ selectedAuthor }) {
             key={post._id}
             className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden"
           >
+          <Link href={`/post/${post._id}`}>
             <div className="relative">
               <img
                 className="h-72 w-full object-cover"
@@ -61,7 +62,7 @@ export default function PostCard({ selectedAuthor }) {
               <p className="text-gray-700 leading-relaxed mb-4">
                 {post.description.slice(0, 120)}...
               </p>
-            </div>
+            </div></Link>
           </div>
         ) : (
           <p key={Math.random()} className="text-red-500 font-bold">

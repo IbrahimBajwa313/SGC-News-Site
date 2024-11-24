@@ -3,6 +3,7 @@ import Post from "../../../models/Post";
 import { IncomingForm } from "formidable"; // Correct import for formidable
 import fs from "fs";
 import path from "path";
+import mongoose from "mongoose"; // Import mongoose for ObjectId handling
 
 // Disable Next.js default body parsing
 export const config = {
@@ -17,13 +18,42 @@ const handler = async (req, res) => {
   switch (req.method) {
     case "GET":
       try {
-        const post = await Post.findById(id);
-        if (!post) {
+        // Use aggregation to find the specific post and include author details
+        const post = await Post.aggregate([
+          {
+            $match: { _id: new mongoose.Types.ObjectId(id) }, // Match the specific post by its ID
+          },
+          {
+            $lookup: {
+              from: "users", // Name of the users collection
+              localField: "author", // Field in the posts collection
+              foreignField: "_id", // Field in the users collection
+              as: "authorDetails", // Output array containing author details
+            },
+          },
+          {
+            $unwind: "$authorDetails", // Convert the array into an object
+          },
+          {
+            $project: {
+              title: 1,
+              description: 1,
+              category: 1,
+              post_date: 1,
+              post_img: 1,
+              "authorDetails.username": 1, // Include only the username from authorDetails
+            },
+          },
+        ]);
+
+        if (!post || post.length === 0) {
           return res.status(404).json({ success: false, message: "Post not found" });
         }
-        res.status(200).json({ success: true, data: post });
+
+        res.status(200).json({ success: true, data: post[0] });
       } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error fetching post:", error.message);
+        res.status(500).json({ success: false, message: "Error fetching post" });
       }
       break;
 
@@ -48,6 +78,7 @@ const handler = async (req, res) => {
             return res.status(404).json({ success: false, message: "Post not found" });
           }
 
+          // Delete old image if it exists and a new image is uploaded
           if (post_img && post.post_img) {
             const oldImagePath = path.join(process.cwd(), "public", post.post_img);
             fs.unlink(oldImagePath, (err) => {
@@ -63,6 +94,7 @@ const handler = async (req, res) => {
 
           res.status(200).json({ success: true, data: updatedPost });
         } catch (error) {
+          console.error("Error updating post:", error.message);
           res.status(500).json({ success: false, message: error.message });
         }
       });
@@ -75,6 +107,7 @@ const handler = async (req, res) => {
           return res.status(404).json({ success: false, message: "Post not found" });
         }
 
+        // Delete the image if it exists
         if (post.post_img) {
           const imagePath = path.join(process.cwd(), "public", post.post_img);
           fs.unlink(imagePath, (err) => {
@@ -85,6 +118,7 @@ const handler = async (req, res) => {
         const deletedPost = await Post.findByIdAndDelete(id);
         res.status(200).json({ success: true, data: deletedPost });
       } catch (error) {
+        console.error("Error deleting post:", error.message);
         res.status(500).json({ success: false, message: error.message });
       }
       break;
