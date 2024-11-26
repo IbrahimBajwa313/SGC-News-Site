@@ -39,7 +39,7 @@ const PostDetails = () => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow">
+      <aside className="w-1/4 bg-gray-100 p-4 rounded-lg shadow h-screen sticky top-0">
         <Sidebar />
       </aside>
 

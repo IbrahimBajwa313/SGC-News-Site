@@ -156,7 +156,7 @@ const Sidebar = () => {
       {/* Recent Posts with Scrollable Area */}
       <div>
         <h4 className="text-xl font-bold mb-4 text-gray-900">Recent Posts</h4>
-        <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
+        <div className="max  overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
           {posts.map((post) => (
             <div key={post._id} className="flex items-start mb-4">
               <Link href={`/post/${post._id}`}>
@@ -176,7 +176,7 @@ const Sidebar = () => {
                     {post.title}
                   </h5>
                 </Link>
-                
+
                 <div className="text-sm text-gray-500">
                   <span className="mr-2 flex items-center">
                     <i className="fa fa-tags mr-1"></i>

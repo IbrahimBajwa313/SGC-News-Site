@@ -22,6 +22,7 @@ const handler = async (req, res) => {
           description: 1,
           category: 1,
           post_date: 1,
+          author: 1,
           post_img: 1,
           "authorDetails.username": 1, // Include only the username from authorDetails
         },
