@@ -16,7 +16,7 @@ export default function AuthorPage() {
 
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`/api/getPosts?author==${id}`);
+        const response = await fetch(`/api/getPostsByAuthor?author=${id}`);
         const data = await response.json();
         console.log("Fetched Posts:", data); // Log the data
         if (data.success && Array.isArray(data.data)) {
