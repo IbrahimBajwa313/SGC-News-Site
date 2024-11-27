@@ -1,6 +1,6 @@
 // pages/index.js
 import Wrapper from "../components/Wrapper";
-import PostCard from "../components/PostCard";
+import PostCard from "../components/Postcard";
 
 export default function HomePage() {
   return (
