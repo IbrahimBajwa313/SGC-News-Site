@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import connectDB from "../middleware/mongoose";
 import Post from "../../models/Post";
 
@@ -9,10 +10,13 @@ const handler = async (req, res) => {
       return res.status(400).json({ success: false, message: "Author ID is required." });
     }
 
+    // Ensure the author ID is cast as an ObjectId
+    const authorObjectId = new mongoose.Types.ObjectId(author);
+
     // Use aggregation to join the users collection with posts
     const posts = await Post.aggregate([
       {
-        $match: { author: author }, // Filter by the author ID
+        $match: { author: authorObjectId }, // Filter by the author ID
       },
       {
         $lookup: {
