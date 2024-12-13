@@ -46,7 +46,7 @@ const Header = () => {
                 height={48}
                 width={48}
               />
-              <span className="text-2xl font-bold hover:text-green-500">
+              <span className="text-2xl font-bold hover:text-gray-500">
                 Save Gaza Campaign
               </span>
             </div>
