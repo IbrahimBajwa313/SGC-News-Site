@@ -2,13 +2,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
 
-const data = [
-  { id: 1, name: "About", url: "/about" },
-  { id: 2, name: "Categories", subMenu: true },
-  { id: 3, name: "Authors", subMenu: true },
-  { id: 4, name: "Contact", url: "/contact" },
-  { id: 5, name: "Login", url: "/login" },
-];
+
 
 const Menu = ({
   showCatMenu,
@@ -18,14 +12,22 @@ const Menu = ({
 }) => {
   const [categories, setCategories] = useState([]);
   const [authors, setAuthors] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Fetch categories from the API
+  const data = [
+    { id: 1, name: "About", url: "/about" },
+    { id: 2, name: "Categories", subMenu: true },
+    { id: 3, name: "Authors", subMenu: true },
+    { id: 4, name: "Contact", url: "/contact" },
+  ];
+
+  
   const fetchCategories = async () => {
     try {
       const res = await fetch("/api/getCategories");
       const data = await res.json();
       if (data.success) {
-        setCategories(data.data); // Assuming data.data is an array of categories
+        setCategories(data.data);
       } else {
         console.error("Failed to fetch categories:", data.message);
       }
@@ -33,14 +35,13 @@ const Menu = ({
       console.error("Error fetching categories:", error);
     }
   };
-
-  // Fetch authors from the API
+  
   const fetchAuthors = async () => {
     try {
       const res = await fetch("/api/getUsers");
       const data = await res.json();
       if (data.success) {
-        setAuthors(data.data); // Assuming data.data is an array of authors
+        setAuthors(data.data);
       } else {
         console.error("Failed to fetch authors:", data.message);
       }
@@ -48,10 +49,26 @@ const Menu = ({
       console.error("Error fetching authors:", error);
     }
   };
+  
+  const checkLoginStatus = () => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    setIsLoggedIn(!!loggedInUser);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    window.location.reload();
+    setIsLoggedIn(false);
+    // Optional: reload the page to reflect changes immediately
+  };
+  const dynamicMenuItem = isLoggedIn
+    ? { id: 5, name: "Logout", onClick: handleLogout }
+    : { id: 5, name: "Login", url: "/login" };
 
   useEffect(() => {
     fetchCategories();
     fetchAuthors();
+    checkLoginStatus();
   }, []);
 
   return (
@@ -133,8 +150,19 @@ const Menu = ({
               <Link href={item?.url}>{item.name}</Link>
             </li>
           )}
+
         </React.Fragment>
       ))}
+
+      <li className="cursor-pointer border border-transparent rounded-md transition-transform duration-300 hover:scale-105 px-4 py-2">
+        {isLoggedIn ? (
+          <span onClick={dynamicMenuItem.onClick} className="cursor-pointer">
+            {dynamicMenuItem.name}
+          </span>
+        ) : (
+          <Link href={dynamicMenuItem.url}>{dynamicMenuItem.name}</Link>
+        )}
+      </li>
     </ul>
   );
 };

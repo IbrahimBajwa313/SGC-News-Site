@@ -6,7 +6,17 @@ const Posts = () => {
 
   // Fetch posts from the API
   const fetchPosts = async () => {
-    const res = await fetch('/api/getPosts');
+    const userRole = localStorage.getItem("role");
+    const userId = localStorage.getItem("userId");
+
+    const res = await fetch('/api/getUserBasedPosts', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Role': userRole, // Include user role in headers
+        'User-ID': userId, // Include user ID in headers
+      },
+    });
     const data = await res.json();
     if (data.success) {
       setPosts(data.data); // Set the posts from the API response
