@@ -28,12 +28,13 @@ const AddPost = () => {
     formData.append("title", post.title);
     formData.append("description", post.description);
     formData.append("category", post.category);
+    formData.append("author", localStorage.getItem("userId"));
 
     if (postImage) {
       formData.append("postImage", postImage); // Append the image file if provided
     }
 
-    const res = await fetch("/api/posts", {
+    const res = await fetch("/api/addPost", {
       method: "POST",
       body: formData,
     });
@@ -44,7 +45,7 @@ const AddPost = () => {
       alert("Post added successfully!");
       router.push("/admin/posts"); // Navigate to the posts list page
     } else {
-      alert("Failed to add post. Check the form inputs.");
+      alert(data.message);
     }
   };
 

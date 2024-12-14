@@ -9,6 +9,7 @@ export default function PostCard({ selectedAuthor }) {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      console.log('inside postcard useeffect')
       try {
         const response = await fetch("/api/getPosts");
         const data = await response.json();

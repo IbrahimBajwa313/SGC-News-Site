@@ -23,8 +23,11 @@ const handler = async (req, res) => {
           .json({ success: false, message: "Username already taken" });
       }
 
+      console.log('unhashed password', password)
       // Hash the password before saving the user
       const hashedPassword = await bcrypt.hash(password, 10);
+
+      console.log('hashed password', hashedPassword)
 
       // Create a new user document
       const newUser = new User({
