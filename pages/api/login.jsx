@@ -14,14 +14,22 @@ const handler = async (req, res) => {
       const user = await User.findOne({username: userName});
       if (!user) {
         console.log('wrong username')
-        return res.status(401).json({ success: false, message: "Invalid username or password" });
+        return res.status(401).json({
+          success: false,
+          message: "Invalid username",
+          errorType: "invalidUsername", // Specify the error type
+        });
       }
 
       // Verify the password
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         console.log('wrong password')
-        return res.status(401).json({ success: false, message: "Invalid password" });
+        return res.status(401).json({
+          success: false,
+          message: "Invalid password",
+          errorType: "invalidPassword", // Specify the error type
+        });
       }
 
       // If the username and password are correct

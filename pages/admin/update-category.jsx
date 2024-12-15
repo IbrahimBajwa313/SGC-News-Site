@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useUser } from '../../context/UserContext';
+import { FaSignOutAlt } from "react-icons/fa";
 
 export default function UpdateCategory() {
+  const { showPopup, updatePopup, logout } = useUser();
+
   const router = useRouter();
   const { cid } = router.query; // Get the category ID from the query params
 
@@ -27,6 +31,7 @@ export default function UpdateCategory() {
         setLoading(false);
       }, 500); // Simulate API delay
     }
+    console.log('showPopup', showPopup)
   }, [cid]);
 
   const handleSubmit = async (e) => {
@@ -111,6 +116,35 @@ export default function UpdateCategory() {
           Cancel
         </button>
       </div>
+      {showPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg text-center">
+            <div className="flex flex-col justify-center items-center gap-5">
+              <div className="bg-red-200  p-6 rounded-full flex items-center justify-center">
+                <FaSignOutAlt size={25} color="red" className="ml-1" />
+              </div>
+              <p className="mb-4 text-lg">Are you sure you want to logout?</p>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={() => {
+                    logout();
+                    updatePopup(false);
+                  }}
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => updatePopup(false)}
+                  className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
