@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { FaCheck, FaSignOutAlt } from "react-icons/fa";
+import { useUser } from "@/context/UserContext";
 
 const EditUser = () => {
   const router = useRouter();
@@ -10,6 +12,9 @@ const EditUser = () => {
     username: "",
     role: "0"
   });
+  const [confirmation, setConfirmation] = useState(false);
+  const { showPopup, updatePopup, logout } = useUser();
+
 
   // Fetch user data when 'id' changes
   useEffect(() => {
@@ -42,7 +47,11 @@ const EditUser = () => {
 
     const data = await res.json();
     if (data.success) {
-      alert("User updated successfully");
+      // alert("User updated successfully");
+      setConfirmation(true)
+      setTimeout(() => {
+        setConfirmation(false);
+      }, 3000);
       router.push("/admin/users"); // Redirect after successful update
     } else {
       alert("Failed to update user");
@@ -50,8 +59,8 @@ const EditUser = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className=" ">
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="w-[40%]">
         <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">Modify User Details</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="form-group">
@@ -104,6 +113,50 @@ const EditUser = () => {
           </button>  
         </form>
       </div>
+      {confirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg text-center">
+            <div className="flex flex-col justify-center items-center gap-5">
+              <div className="bg-green-400  p-6 rounded-full flex items-center justify-center">
+                <FaCheck size={25} color="white" className="" />
+              </div>
+              <div className="flex justify-center gap-3">
+                User Updated Successfully!
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg text-center">
+            <div className="flex flex-col justify-center items-center gap-5">
+              <div className="bg-red-200  p-6 rounded-full flex items-center justify-center">
+                <FaSignOutAlt size={25} color="red" className="ml-1" />
+              </div>
+              <p className="mb-4 text-lg">Are you sure you want to logout?</p>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={() => {
+                    logout();
+                    updatePopup(false);
+                  }}
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => updatePopup(false)}
+                  className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -15,7 +15,6 @@ const Menu = ({ showCatMenu, setShowCatMenu, showAuthorMenu, setShowAuthorMenu }
     { id: 1, name: "About", url: "/about" },
     { id: 2, name: "Categories", subMenu: true },
     { id: 3, name: "Authors", subMenu: true },
-    { id: 4, name: "Contact", url: "/contact" },
   ];
 
   // Fetch categories and authors
@@ -35,7 +34,7 @@ const Menu = ({ showCatMenu, setShowCatMenu, showAuthorMenu, setShowAuthorMenu }
 
   const fetchAuthors = async () => {
     try {
-      const res = await fetch("/api/getUsers");
+      const res = await fetch("/api/getAllUsers");
       const data = await res.json();
       if (data.success) {
         setAuthors(data.data);
@@ -142,13 +141,20 @@ const Menu = ({ showCatMenu, setShowCatMenu, showAuthorMenu, setShowAuthorMenu }
         ))}
 
         <li className="cursor-pointer border border-transparent rounded-md transition-transform duration-300 hover:scale-105 px-4 py-2">
-          {(localStorage.getItem("loggedInUser") || adminPage) ? (
+          {(localStorage.getItem("loggedInUser") && adminPage) && (
             <span onClick={()=>updatePopup(true)} className="cursor-pointer">
               Logout
             </span>
-          ) : (
-            <Link href='/login'>Login</Link>
-          )}
+          ) }
+          {(localStorage.getItem("loggedInUser") && !adminPage) && (
+            <Link href='/admin/posts'  className="cursor-pointer">
+              Admin Panel
+            </Link>
+          ) }
+          {(!localStorage.getItem("loggedInUser")) && (
+                        <Link href='/login'>Login</Link>
+
+          ) }
         </li>
       </ul>
 

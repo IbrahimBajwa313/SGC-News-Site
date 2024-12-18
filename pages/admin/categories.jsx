@@ -1,70 +1,138 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaEdit, FaTrash, FaCheck } from "react-icons/fa";
 import { useUser } from '../../context/UserContext';
+import Loader from "@/components/loader";
 
 const Categories = () => {
   const { showPopup, updatePopup, logout } = useUser();
+  const [userRole, setUserRole] = useState(false);
 
   const [categories, setCategories] = useState([]);
+  const [showDel, setShowDel] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
+  const [categoryId, setCategoryId] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   // Fetch categories from the API
   const fetchCategories = async () => {
+    setLoading(true)
     const res = await fetch('/api/getCategories');
     const data = await res.json();
     if (data.success) {
-      setCategories(data.data); // Set the categories from the API response
+      setCategories(data.data);
+    setLoading(false)
+    // Set the categories from the API response
     } else {
       console.error('Failed to fetch categories:', data.message);
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/api/deleteCategory/${categoryId}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        console.log("Catgeoyr deleted successfully");
+        setCategories((prevCat) => prevCat.filter(cat => cat._id !== categoryId)); // Remove deleted post
+        setShowDel(false);
+        setConfirmation(true);
+
+        setTimeout(() => {
+          setConfirmation(false);
+        }, 3000);
+      } else {
+        console.error("Failed to delete cate:", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsDeleting(false); // Stop loader
+    }
+  }
+
   useEffect(() => {
-    fetchCategories(); // Fetch categories on component mount
+    fetchCategories(); 
+    const role = Number(localStorage.getItem("role"));
+    setUserRole(role);
   }, []);
 
+    if (isDeleting) return <Loader />;
+    if (loading) return <Loader />;
+
+
   return (
-    <div className="container mx-auto p-4 min-h-screen mt-8">
+    <div className="container mx-auto p-4 px-20 min-h-screen mt-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">All Categories</h1>
-        <Link href="/admin/addCategory">
+        {userRole ? (
+          <Link href="/admin/addCategory">
           <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
             Add Category
           </button>
         </Link>
+        ):(null)}
       </div>
 
       <div className="overflow-x-auto">
-        <table className="table-auto w-full border-collapse border border-gray-200">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">Index</th>
-              <th className="border border-gray-300 p-2">Category Name</th>
-              <th className="border border-gray-300 p-2">Post Count</th>
-              <th className="border border-gray-300 p-2">Edit</th>
-              <th className="border border-gray-300 p-2">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((category, index) => (
-              <tr key={category._id}> {/* Use the MongoDB _id as the key */}
-                <td className="border border-gray-300 p-2">{index + 1}</td>
-                <td className="border border-gray-300 p-2">{category.category_name}</td>
-                <td className="border border-gray-300 p-2">{category.post}</td>
-                <td className="border border-gray-300 p-2">
-                  <Link href={`/admin/editCategory/${category._id}`}>
-                    <button className="text-blue-600 hover:underline">Edit</button>
-                  </Link>
-                </td>
-                <td className="border border-gray-300 p-2">
-                  <Link href={`/admin/deleteCategory/${category._id}`}>
-                    <button className="text-red-600 hover:underline">Delete</button>
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <table className="table-auto w-full rounded-lg shadow-md overflow-hidden">
+  <thead className="bg-gray-700 text-white">
+    <tr>
+      <th className="p-3 text-left font-semibold">Index</th>
+      <th className="p-3 text-left font-semibold">Category Name</th>
+      <th className="p-3 text-left font-semibold">Post Count</th>
+      {userRole ? (
+        <th className="p-3 text-center font-semibold">Edit</th>
+      ) : null}
+      {userRole ? (
+        <th className="p-3 text-center font-semibold">Delete</th>
+      ) : null}
+    </tr>
+  </thead>
+  <tbody>
+    {categories.map((category, index) => (
+      <tr
+        key={category._id}
+        className={`hover:bg-gray-200 ${
+          index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
+        }`}
+      >
+        <td className="p-3 text-gray-800">{index + 1}</td>
+        <td className="p-3 text-gray-800">{category.category_name}</td>
+        <td className="p-3 text-gray-800">{category.post}</td>
+        {userRole ? (
+          <td className="p-3 text-center">
+            <Link
+              href={`/admin/editCategory/${category._id}`}
+              className="text-blue-500 hover:text-blue-700 hover:underline block w-fit mx-auto"
+            >
+              <FaEdit size={20} />
+            </Link>
+          </td>
+        ) : null}
+        {userRole ? (
+          <td className="p-3 text-center">
+            <div
+              className="text-red-500 hover:text-red-700 hover:underline cursor-pointer block w-fit mx-auto"
+              onClick={() => {
+                setShowDel((prevState) => !prevState);
+                setCategoryId(category._id);
+              }}
+            >
+              <FaTrash size={18} />
+            </div>
+          </td>
+        ) : null}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+
       </div>
 
       {showPopup && (
@@ -91,6 +159,52 @@ const Categories = () => {
                 >
                   No
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      
+      {showDel && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg text-center">
+            <div className="flex flex-col justify-center items-center gap-5">
+              <div className="bg-red-200  p-6 rounded-full flex items-center justify-center">
+                <FaTrash size={25} color="red" className="ml-1" />
+              </div>
+              <p className="mb-4 text-lg">Are you sure you want to delete this category?</p>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={() => {
+                    handleDelete();
+                    setIsDeleting(true)
+                  }}
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => setShowDel(false)}
+                  className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg text-center">
+            <div className="flex flex-col justify-center items-center gap-5">
+              <div className="bg-green-400  p-6 rounded-full flex items-center justify-center">
+                <FaCheck size={25} color="white" className="" />
+              </div>
+              <div className="flex justify-center gap-3">
+                Category Deleted Successfully!
               </div>
             </div>
           </div>

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaCheck, FaSignOutAlt } from "react-icons/fa";
 import { useUser } from '../../context/UserContext';
 
 export default function AddCategory() {
   const router = useRouter();
   const { showPopup, updatePopup, logout } = useUser();
+  const [confirmation, setConfirmation] = useState(false);
 
 
   const [categoryName, setCategoryName] = useState("");
@@ -13,7 +14,7 @@ export default function AddCategory() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("/api/addCategory", {
+    const res = await fetch("/api/addCategories", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +24,10 @@ export default function AddCategory() {
 
     const data = await res.json();
     if (data.success) {
-      alert("Category created successfully");
+      setConfirmation(true)
+      setTimeout(() => {
+        setConfirmation(false);
+      }, 3000);
       router.push("/admin/categories");
     } else {
       alert("Failed to create category");
@@ -78,6 +82,21 @@ export default function AddCategory() {
                 >
                   No
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+       {confirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg text-center">
+            <div className="flex flex-col justify-center items-center gap-5">
+              <div className="bg-green-400  p-6 rounded-full flex items-center justify-center">
+                <FaCheck size={25} color="white" className="" />
+              </div>
+              <div className="flex justify-center gap-3">
+                Category Added Successfully!
               </div>
             </div>
           </div>

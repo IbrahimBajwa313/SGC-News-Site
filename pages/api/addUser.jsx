@@ -1,11 +1,13 @@
 import connectDB from "../middleware/mongoose";
-import User from "../../models/User"; // Correct model import
-import bcrypt from "bcrypt"; // To hash the password
+import User from "../../models/User";
+import bcrypt from "bcrypt";
+import fs from "fs";
+import path from "path";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
     try {
-      // Extracting data from the request body
+      // Parse the form data (assuming it's sent as `FormData`)
       const { first_name, last_name, username, password, role } = req.body;
 
       // Validate required fields
@@ -23,11 +25,29 @@ const handler = async (req, res) => {
           .json({ success: false, message: "Username already taken" });
       }
 
-      console.log('unhashed password', password)
-      // Hash the password before saving the user
+      // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      console.log('hashed password', hashedPassword)
+      // Handle file upload (optional profile picture)
+      let profilePicPath = "/uploads/default-pic.jpg"; // Default picture
+      if (req.files && req.files.post_img) {
+        const file = req.files.post_img; // Assuming `profile_pic` is the field name
+        const uploadDir = path.join(process.cwd(), "public/uploads");
+
+        // Create the upload directory if it doesn't exist
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        const filePath = path.join(
+          uploadDir,
+          `${Date.now()}-${file.name.replace(/\s+/g, "-")}`
+        );
+        profilePicPath = `/uploads/${path.basename(filePath)}`;
+
+        // Save the file to the server
+        fs.writeFileSync(filePath, file.data);
+      }
 
       // Create a new user document
       const newUser = new User({
@@ -36,6 +56,7 @@ const handler = async (req, res) => {
         username,
         password: hashedPassword,
         role,
+        pic: profilePicPath,
       });
 
       // Save the user document to the database

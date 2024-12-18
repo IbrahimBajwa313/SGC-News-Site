@@ -14,6 +14,9 @@ export default function AuthorPage() {
   useEffect(() => {
     if (!id) return;
 
+    console.log('ID',id)
+
+
     const fetchPosts = async () => {
       setLoading(true);
       try {

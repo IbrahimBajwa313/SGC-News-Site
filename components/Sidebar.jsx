@@ -131,9 +131,9 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-full p-6 bg-white rounded-lg shadow-lg">
+    <div className="w-full p-6 bg-white rounded-lg shadow-lg h-[92vh] overflow-auto custom-scrollbar">
       {/* Search Box */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <h4 className="text-xl font-bold mb-4 text-gray-900">Search</h4>
         <form onSubmit={handleSearch} className="flex items-center">
           <input
@@ -151,7 +151,7 @@ const Sidebar = () => {
             Search
           </button>
         </form>
-      </div>
+      </div> */}
 
       {/* Recent Posts with Scrollable Area */}
       <div>
@@ -193,7 +193,37 @@ const Sidebar = () => {
           ))}
         </div>
       </div>
+
+
+
+
+
+
+      <style jsx>{`
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+     background: #e2e8f0;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1; /* Tailwind's gray-300 */
+    border-radius: 10px;
+    border: 2px solid #f1f1f1; /* Adds spacing around the thumb */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8; /* Tailwind's gray-400 */
+  }
+`}</style>
+
     </div>
+
+
+    
   );
 };
 

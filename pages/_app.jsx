@@ -42,7 +42,6 @@ export default function App({ Component, pageProps }) {
     { href: '/admin/categories', label: 'Categories' },
     { href: '/admin/posts', label: 'Posts' },
     { href: '/admin/users', label: 'Users' },
-    { href: '/admin/settings', label: 'Settings' },
   ];
 
 
@@ -75,7 +74,7 @@ export default function App({ Component, pageProps }) {
 
     checkUserAndRedirect();
 
-    if (router.pathname.startsWith('/admin') && !router.pathname.includes('addUser') && !router.pathname.includes('addPost') && !router.pathname.includes('addCategory')) {
+    if (router.pathname.startsWith('/admin') && !router.pathname.includes('addUser') && !router.pathname.includes('addPost') && !router.pathname.includes('addCategory') && !router.pathname.includes('editPost') && !router.pathname.includes('deletePost') && !router.pathname.includes('editUser') && !router.pathname.includes('editCategory')) {
       setAdminPage(true)
     } else {
       setAdminPage(false)
@@ -107,35 +106,51 @@ export default function App({ Component, pageProps }) {
         </Headroom>
 
         {adminPage && (
-          <div className="menu w-1/4 mx-28 mt-8 flex items-center gap-7" onClick={() => setLinks((prev) => !prev)}>
-            <div className="logo bg-slate-600 py-3 px-5 flex items-center justify-center rounded-full cursor-pointer hover:bg-slate-700">
-              <i class="fas fa-bars text-2xl text-white"></i>
-            </div>
+          
+          // <div className="menu w-1/4 mx-28 mt-8 flex items-center gap-7" onClick={() => setLinks((prev) => !prev)}>
+          //   <div className="logo bg-slate-600 py-3 px-5 flex items-center justify-center rounded-full cursor-pointer hover:bg-slate-700">
+          //     <i class="fas fa-bars text-2xl text-white"></i>
+          //   </div>
 
-            <AnimatePresence>
-              {links && (
-                <motion.div
-                  key="links"
-                  className="links flex justify-center items-center gap-5 py-2 px-4 rounded-lg bg-slate-700"
-                  initial={{ x: '-20%' }}
-                  animate={{ x: '0%' }}
-                  exit={{ x: '-20%' }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 40 }}
-                >
-                  {menuLinks
-                    .filter((link) => link.href !== router.pathname) // Filter out the current page
+          //   <AnimatePresence>
+          //     {links && (
+          //       <motion.div
+          //         key="links"
+          //         className="links flex justify-center items-center gap-5 py-2 px-4 rounded-lg bg-slate-700"
+          //         initial={{ x: '-20%' }}
+          //         animate={{ x: '0%' }}
+          //         exit={{ x: '-20%' }}
+          //         transition={{ type: 'spring', stiffness: 400, damping: 40 }}
+          //       >
+          //         {menuLinks
+          //           .filter((link) => link.href !== router.pathname) // Filter out the current page
+          //           .map((link) => (
+          //             <Link
+          //               key={link.href}
+          //               href={link.href}
+          //               className="text-white cursor-pointer hover:text-gray-300"
+          //             >
+          //               {link.label}
+          //             </Link>
+          //           ))}
+          //       </motion.div>
+          //     )}
+          //   </AnimatePresence>
+          // </div>
+          <div className="menu w-full mx-auto mt-3 flex justify-center items-center gap-5">
+{menuLinks
+                    // .filter((link) => link.href !== router.pathname) // Filter out the current page
                     .map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
-                        className="text-white cursor-pointer hover:text-gray-300"
+                        className={`font-semibold text-xl cursor-pointer hover:text-gray-500 ${
+                          router.pathname === link.href ? 'text-blue-500 font-bold' : ''
+                        }`}
                       >
                         {link.label}
                       </Link>
                     ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         )}
         <Component />
