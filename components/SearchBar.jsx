@@ -56,7 +56,7 @@ const SearchBar = ({ setshowsearch }) => {
   }, []);
 
   return (
-    <div className="relative w-full" ref={dropdownRef}>
+    <div className="relative w-full hidden lg:block" ref={dropdownRef}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
