@@ -68,7 +68,7 @@ export default function PostCard({ selectedAuthor }) {
     post && post._id ? (
       <div
         key={post._id}
-        className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden"
+        className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden h-[93vh]"
       >
         <Link href={`/post/${post._id}`}>
           <div className="relative">

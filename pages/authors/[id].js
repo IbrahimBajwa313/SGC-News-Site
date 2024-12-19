@@ -72,7 +72,7 @@ export default function AuthorPage() {
           {posts.map((post) => (
             <div key={post._id} className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden">
               <div className="relative">
-                <img className="h-72 w-full object-cover" src={`/uploads/${post.post_img}`} alt={post.title || "Post Image"} />
+                <img className="h-72 w-full object-cover" src={`/uploads/${post.post_img[0]}`} alt={post.title || "Post Image"} />
                 <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs font-bold uppercase px-4 py-2 rounded-br-lg">
                   {post.category || "Uncategorized"}
                 </div>

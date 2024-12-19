@@ -162,7 +162,7 @@ const Sidebar = () => {
               <Link href={`/post/${post._id}`}>
                 <div className="block w-16 h-16 overflow-hidden rounded-md shadow-lg relative cursor-pointer">
                   <Image
-                    src={`/uploads/${post.post_img}`}
+                    src={`/uploads/${post.post_img[0]}`}
                     alt={post.title}
                     layout="fill"
                     objectFit="cover"
