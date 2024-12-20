@@ -26,33 +26,7 @@ export default function PostCard({ selectedAuthor }) {
     };
 
     const fetchUsers = async () => {
-      // const userRole = localStorage.getItem("role");
-      // const userId = localStorage.getItem("userId"); // Retrieve userId from local storage
-    
-    
-      // try {
-      //   // Fetch users with headers containing role and user ID
-      //   const res = await fetch("/api/getUsers", {
-      //     method: "GET",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Role: userRole,
-      //       "User-ID": userId,
-      //     },
-      //   });
-    
-      //   const data = await res.json();
-    
-      //   if (data.success) {
-      //     console.log("Fetched users data:", data);
-    
-      //     // Parse the logged-in user from local storage
-      //     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    
-          
-      // } catch (error) {
-      //   console.error("Error fetching users:", error);
-      // } 
+       
     };
     
     
@@ -88,7 +62,7 @@ export default function PostCard({ selectedAuthor }) {
               {post.title}
             </h2>
             <p className="text-sm text-gray-500 mb-4">
-              By{" "}
+              Author {" "}
               <span className="font-semibold">
                 {post.authorDetails.username}
               </span>{" "}

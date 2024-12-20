@@ -66,7 +66,7 @@ export default function AuthorPage() {
     <div className="container mx-auto py-10">
       <Wrapper>
         <h1 className="text-3xl my-6 flex items-center justify-center font-bold mb-8">
-          Posts by <span className="text-primary">{posts[0]?.authorDetails?.username}</span>
+          Posts by&nbsp; <span className="text-primary"> {posts[0]?.authorDetails?.username}</span>
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post) => (
@@ -82,7 +82,7 @@ export default function AuthorPage() {
                   {post.title || "Untitled Post"}
                 </h2>
                 <p className="text-sm text-gray-500 mb-4">
-                  By <span className="font-semibold">{post.authorDetails?.username || "Unknown Author"}</span> | <span>{new Date(post.post_date).toLocaleDateString()}</span>
+                  Author <span className="font-semibold">{post.authorDetails?.username || "Unknown Author"}</span> | <span>{new Date(post.post_date).toLocaleDateString()}</span>
                 </p>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   {post.description?.slice(0, 120) || "No description available..."}...

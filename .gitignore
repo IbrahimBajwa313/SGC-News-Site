@@ -33,5 +33,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
+ 
+# Ignore package-lock.json
 package-lock.json
