@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaSignOutAlt, FaEdit, FaTrash, FaCheck } from "react-icons/fa";
 import { useUser } from '../../context/UserContext';
-import Loader from "@/components/loader";
+import Loader from "@/components/Loader";
 
 const Categories = () => {
   const { showPopup, updatePopup, logout } = useUser();

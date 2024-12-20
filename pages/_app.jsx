@@ -15,7 +15,7 @@ import {
 import { useRouter } from "next/router";
 import Headroom from "react-headroom";
 import { UserProvider, useUser } from '../context/UserContext';
-import Loader from '../components/loader.jsx';
+import Loader from '../components/Loader.jsx';
 
 import { motion, AnimatePresence } from 'framer-motion';
 

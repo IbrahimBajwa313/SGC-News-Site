@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FaSignOutAlt, FaCheck } from 'react-icons/fa';
 import { useRouter } from "next/router";
 import { useUser } from '../../../context/UserContext';
-import Loader from "@/components/loader";
+import Loader from "@/components/Loader";
 
 
 export default function editCat() {

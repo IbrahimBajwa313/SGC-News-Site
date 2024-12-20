@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { FaCheck, FaSignOutAlt } from "react-icons/fa";
 import { AiOutlineClose } from 'react-icons/ai';
 import { useUser } from '../../context/UserContext';
-import Loader from "@/components/loader";
+import Loader from "@/components/Loader";
 
 const AddPost = () => {
   const { showPopup, updatePopup, logout } = useUser();

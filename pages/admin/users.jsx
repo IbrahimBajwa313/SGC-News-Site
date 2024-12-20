@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useUser } from '../../context/UserContext';
 import { FaCheck, FaSignOutAlt, FaTrash, FaEdit  } from "react-icons/fa";
-import Loader from '../../components/loader'
+import Loader from '../../components/Loader'
 
 
 export default function Users() {
