@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaCheck } from "react-icons/fa";
-import Loader from "@/components/loader";
+import Loader from "@/components/Loader";
 
 const EditPost = () => {
   const router = useRouter();

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FaSignOutAlt, FaTrash, FaCheck, FaEdit } from "react-icons/fa";
 import { useUser } from "../../context/UserContext";
 import { motion, AnimatePresence } from "framer-motion";
-import Loader from "../../components/loader";
+import Loader from "../../components/Loader";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
