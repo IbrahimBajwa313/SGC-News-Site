@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import Wrapper from "./Wrapper";
@@ -92,7 +90,7 @@ const Header = () => {
                 />
               </div>
             )}
-          <SearchBar  />
+            <SearchBar />
           </div>
         </motion.div>
       )}
@@ -101,4 +99,3 @@ const Header = () => {
 };
 
 export default Header;
- 
