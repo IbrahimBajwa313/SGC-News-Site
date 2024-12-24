@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useUser } from "../../../context/UserContext";
 import Loader from "@/components/Loader";
 
-export default function editCat() {
+export default function EditCat() {
   const router = useRouter();
   const { showPopup, updatePopup, logout } = useUser();
   const { id } = router.query;
