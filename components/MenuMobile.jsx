@@ -1,152 +1,173 @@
-import Link from 'next/link';
-import React from 'react'
-import { useState,useEffect } from 'react';
-import { motion } from 'framer-motion';
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+import { useRouter } from "next/router";
+import { useUser } from "../context/UserContext";
 
-// importing icons from React
-import { BsChevronDown,BsChevronUp } from 'react-icons/bs'
+const MenuMobile = ({
+  showCatMenu,
+  setShowCatMenu,
+  showAuthorMenu,
+  setShowAuthorMenu,
+  setMobileMenu,
+}) => {
+  const { user, logout, updatePopup } = useUser();
+  const [categories, setCategories] = useState([]);
+  const [authors, setAuthors] = useState([]);
+  const [adminPage, setAdminPage] = useState(false);
+  const router = useRouter();
 
+  const data = [
+    { id: 1, name: "About", url: "/about" },
+    { id: 2, name: "Categories", subMenu: true },
+    { id: 3, name: "Authors", subMenu: true },
+  ];
 
+  // Fetch categories and authors
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/getCategories");
+      const data = await res.json();
+      if (data.success) {
+        setCategories(data.data);
+      } else {
+        console.error("Failed to fetch categories:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
-// Objects containing info 
-const data = [
-    { id: 1, name: "Home", url: "/" },
-    { id: 2, name: 'Sort', subSortMenu: true },     
-    { id: 3, name: "About", url: "/about" },
-    { id: 4, name: "Categories", subMenu: true },
-    { id: 5, name: "Contact", url: "/contact" },
-    { id: 6, name: "Login", url: "/login" },
-];
+  const fetchAuthors = async () => {
+    try {
+      const res = await fetch("/api/getAllUsers");
+      const data = await res.json();
+      if (data.success) {
+        setAuthors(data.data);
+      } else {
+        console.error("Failed to fetch authors:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching authors:", error);
+    }
+  };
 
-const subMenuData = [
-    { id: 1, name: "Jordan", doc_count: 11 },
-    { id: 2, name: "Sneakers", doc_count: 8 },
-    { id: 3, name: "running shoes", doc_count: 64 },
-    { id: 4, name: "Football shoes", doc_count: 107 },
-];
-const subSortData = [
-    { id: 1, name: 'Price low to high' },
-    { id: 2, name: 'Price high to low' },
-    { id: 3, name: 'Newest Arrivals' },
-    { id: 4, name: 'Featured' },
-];
+  useEffect(() => {
+    fetchCategories();
+    fetchAuthors();
 
-// Objects starts here ( Menu logic )showSortMenu={showSortMenu}
-        
-const MenuMobile = ({ showCatMenu, setShowCatMenu, setMobileMenu ,showSortMenu,setShowSortMenu}) => {
-const [isClient, setisClient] = useState(false)
+    if (router.pathname.includes("/admin")) {
+      setAdminPage(true);
+    } else {
+      setAdminPage(false);
+    }
+  }, [router]);
 
-useEffect(() => {
-    setisClient(true) 
-}, [])
+  return (
+    <div>
+      <ul className="flex flex-col z-40 lg:hidden absolute top-[105px] font-medium left-0 w-full h-[calc(100vh-210px)] text-black bg-white border-t">
+        {data.map((item) => (
+          <React.Fragment key={item.id}>
+            {item?.subMenu && item.name === "Categories" && (
+              <li
+                className="cursor-pointer z-40 gap-2 flex text-center relative border border-transparent rounded-md hover:shadow-lg px-4 py-2"
+                onClick={() => {
+                  setShowCatMenu(!showCatMenu);
+                  setShowAuthorMenu(false);
+                }}
+              >
+                {item.name}
+                {!showCatMenu ? (
+                  <BsChevronDown size={18} className="mt-1" />
+                ) : (
+                  <BsChevronUp size={18} className="mt-1" />
+                )}
+                {showCatMenu && (
+                  <ul className="bg-white z-40 mt-2 left-0 w-full text-black shadow-xl max-h-40 overflow-y-auto">
+                    {categories.length > 0 ? (
+                      categories.map(({ category_name, _id }) => (
+                        <Link
+                          key={_id}
+                          href={`/category/${_id}`}
+                          onClick={() => setShowCatMenu(false)}
+                        >
+                          <li className="cursor-pointer flex justify-between items-center px-3 py-2 hover:shadow-sm hover:bg-gray-100 rounded-md">
+                            {category_name}
+                          </li>
+                        </Link>
+                      ))
+                    ) : (
+                      <li className="p-3 text-gray-500">No categories found</li>
+                    )}
+                  </ul>
+                )}
+              </li>
+            )}
 
-    return (
-        <div >
-            <motion.ul initial={{opacity:0}} animate={{ opacity:1}} transition={{duration:.4}}
-             className=' flex flex-col z-40 lg:hidden absolute top-[50px] font-medium left-0 w-full h-[calc(100vh-50px)] text-black bg-white border-t'>
-                {
-                    data.map((item) => {
-                        return (
-                            <React.Fragment key={item.id}>
-                                {item.subSortMenu &&
-                                    <li className='py-4 px-5 border-b  gap-2 flex flex-col relative'
-                                        onClick={() => { setShowSortMenu(!showSortMenu) }}
-                                    >
-                                        <div className='flex  '>
-                                            {item.name}
-                                           { !showSortMenu &&  <BsChevronDown size={18} className='mt-1 ml-2' />}
-                                           { showSortMenu &&  <BsChevronUp size={18} className='mt-1 ml-2' />}
-                                        </div>
+            {item?.subMenu && item.name === "Authors" && (
+              <li
+                className="cursor-pointer z-40 gap-2 flex text-center relative border border-transparent rounded-md hover:shadow-lg px-4 py-2"
+                onClick={() => {
+                  setShowAuthorMenu(!showAuthorMenu);
+                  setShowCatMenu(false);
+                }}
+              >
+                {item.name}
+                {!showAuthorMenu ? (
+                  <BsChevronDown size={18} className="mt-1" />
+                ) : (
+                  <BsChevronUp size={18} className="mt-1" />
+                )}
+                {showAuthorMenu && (
+                  <ul className="bg-white z-40 mt-2 left-0 w-full text-black shadow-xl max-h-40 overflow-y-auto">
+                    {authors.length > 0 ? (
+                      authors.map(({ username, _id }) => (
+                        <Link
+                          key={_id}
+                          href={`/authors/${_id}`}
+                          onClick={() => setShowAuthorMenu(false)}
+                        >
+                          <li className="cursor-pointer flex justify-between items-center px-3 py-2 hover:shadow-sm hover:bg-gray-100 rounded-md">
+                            {username}
+                          </li>
+                        </Link>
+                      ))
+                    ) : (
+                      <li className="p-3 text-gray-500">No authors found</li>
+                    )}
+                  </ul>
+                )}
+              </li>
+            )}
 
-                                        {/* Menu in Category option */}
-                                        
-                                        {showSortMenu && (
-                                            <motion.ul animate={{y:0}} initial={{y:-30}} transition={{duration:.4}} className='bg-black/[0.05] -mx-5 mt-4 -mb-4 '>
-                                                {subSortData.map((sortData) => {
-                                                    return (
-                                                        <Link
-                                                            key={sortData.id} href={"/"}
-                                                            onClick={() => {
-                                                                setShowSortMenu(false);
-                                                                // setShowCatMenu(false);
-                                                            }}>
+            {!item?.subMenu && (
+              <li className="cursor-pointer border border-transparent rounded-md transition-transform duration-300 hover:scale-105 px-4 py-2">
+                <Link href={item?.url} onClick={() => setMobileMenu(false)}>
+                  {item.name}
+                </Link>
+              </li>
+            )}
+          </React.Fragment>
+        ))}
 
-                                                         {isClient&&   <li onClick={()=>{
-                                                                window.location.href=`/Sortby/${sortData.name}`
-                                                            }} className='py-4 px-8 border-t flex justify-between'>
-                                                                {sortData.name}
-                                                               
-                                                            </li>}
-                                                        </Link>
-                                                    )
-                                                })}
-                                            </motion.ul>
-                                        )}
-                                       
-                                    </li>}
-                                {item.subMenu &&
-                                    <li className='py-4 px-5 border-b  gap-2 flex flex-col relative'
-                                        onClick={() => { setShowCatMenu(!showCatMenu) }}
-                                    >
-                                        <div className='flex  '>
-                                            {item.name}
-                                           { !showCatMenu &&  <BsChevronDown size={18} className='mt-1 ml-2' />}
-                                           { showCatMenu &&  <BsChevronUp size={18} className='mt-1 ml-2' />}
-                                        </div>
+        <li className="cursor-pointer border border-transparent rounded-md transition-transform duration-300 hover:scale-105 px-4 py-2">
+          {localStorage.getItem("loggedInUser") && adminPage && (
+            <span onClick={() => updatePopup(true)} className="cursor-pointer">
+              Logout
+            </span>
+          )}
+          {localStorage.getItem("loggedInUser") && !adminPage && (
+            <Link href="/admin/posts" className="cursor-pointer">
+              Admin Panel
+            </Link>
+          )}
+          {!localStorage.getItem("loggedInUser") && (
+            <Link href="/login">Login</Link>
+          )}
+        </li>
+      </ul>
+    </div>
+  );
+};
 
-                                        {/* Menu in Category option */}
-                                        
-                                        {showCatMenu && (
-                                            <motion.ul animate={{y:0}} initial={{y:-30}} transition={{duration:.4}} className='bg-black/[0.05] -mx-5 mt-4 -mb-4 '>
-                                                {subMenuData.map((subMenu) => {
-                                                    return (
-                                                        <Link
-                                                            key={subMenu.id} href={"/"}
-                                                            onClick={() => {
-                                                                setShowCatMenu(false);
-                                                                // setShowCatMenu(false);
-                                                            }}>
-
-                                                         {isClient&&   <li onClick={()=>{
-                                                                window.location.href=`/category/${subMenu.name}`
-                                                            }} className='py-4 px-8 border-t flex justify-between'>
-                                                                {subMenu.name}
-                                                               
-                                                            </li>}
-                                                        </Link>
-                                                    )
-                                                })}
-                                            </motion.ul>
-                                        )}
-                                       
-                                    </li>}
-
-                                    
-                                
-                                
-                                
-                                  {!item.subMenu&&!item.subSortMenu&&  <li className="py-4 px-5 border-b">
-                                        <Link
-                                            href={item?.url}
-                                            onClick={() => setMobileMenu(false)}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                    </li>}
-                                
-                                
-                            </React.Fragment>
-                        )
-                    })
-                }
-            </motion.ul>
-          
-        </div>
-    )
-}
-
-export default MenuMobile
-
-
-
-
+export default MenuMobile;

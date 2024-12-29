@@ -11,10 +11,10 @@ export default function AuthorPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(router.query)
+    console.log(router.query);
     if (!id) return;
 
-    console.log('catID',id)
+    console.log("catID", id);
 
     const fetchPosts = async () => {
       setLoading(true);
@@ -37,7 +37,13 @@ export default function AuthorPage() {
     fetchPosts();
   }, [id]);
 
-  if (loading) return <Loader />;
+  //if (loading) return <Loader />;
+  if (loading)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <Loader />
+      </div>
+    );
 
   if (posts.length === 0) {
     return (
@@ -47,7 +53,8 @@ export default function AuthorPage() {
             No Posts Found
           </h2>
           <p className="text-gray-600 mb-6">
-            Sorry, we couldn't find any posts on the selected category. Check back later.
+            Sorry, we couldn't find any posts on the selected category. Check
+            back later.
           </p>
           <Link href="/" passHref>
             <button className="bg-blue-500 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-600 transition duration-300 ease-in-out">
@@ -66,13 +73,21 @@ export default function AuthorPage() {
     <div className="container mx-auto py-10">
       <Wrapper>
         <h1 className="text-3xl my-6 flex items-center justify-center font-bold mb-8 space-x-2">
-          <span>Posts on</span> <span className="text-primary">{posts[0]?.category}</span>
+          <span>Posts on</span>{" "}
+          <span className="text-primary">{posts[0]?.category}</span>
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post) => (
-            <div key={post._id} className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden">
+            <div
+              key={post._id}
+              className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden"
+            >
               <div className="relative">
-                <img className="h-72 w-full object-cover" src={`/uploads/${post.post_img[0]}`} alt={post.title || "Post Image"} />
+                <img
+                  className="h-72 w-full object-cover"
+                  src={`/uploads/${post.post_img[0]}`}
+                  alt={post.title || "Post Image"}
+                />
                 <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs font-bold uppercase px-4 py-2 rounded-br-lg">
                   {post.category || "Uncategorized"}
                 </div>
@@ -82,10 +97,16 @@ export default function AuthorPage() {
                   {post.title || "Untitled Post"}
                 </h2>
                 <p className="text-sm text-gray-500 mb-4">
-                  Author <span className="font-semibold">{post.authorDetails?.username || "Unknown Author"}</span> | <span>{new Date(post.post_date).toLocaleDateString()}</span>
+                  Author{" "}
+                  <span className="font-semibold">
+                    {post.authorDetails?.username || "Unknown Author"}
+                  </span>{" "}
+                  | <span>{new Date(post.post_date).toLocaleDateString()}</span>
                 </p>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  {post.description?.slice(0, 120) || "No description available..."}...
+                  {post.description?.slice(0, 120) ||
+                    "No description available..."}
+                  ...
                 </p>
               </div>
             </div>

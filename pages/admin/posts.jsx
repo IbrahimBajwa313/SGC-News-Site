@@ -70,8 +70,20 @@ const Posts = () => {
     fetchPosts(); // Fetch posts on component mount
   }, []);
 
-  if (isDeleting) return <Loader />;
-  if (loading) return <Loader />;
+  // if (isDeleting) return <Loader />;
+  if (isDeleting)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <Loader />
+      </div>
+    );
+  // if (loading) return <Loader />;
+  if (loading)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="container mx-auto p-4 px-4 sm:px-8 min-h-screen mt-8">

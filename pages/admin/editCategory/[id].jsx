@@ -64,7 +64,13 @@ export default function EditCat() {
     }
   };
 
-  if (isUpdating) return <Loader />;
+  // if (isUpdating) return <Loader />;
+  if (isUpdating)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="p-6 sm:p-8 md:p-12 bg-white rounded-lg shadow-lg max-w-3xl mx-auto">

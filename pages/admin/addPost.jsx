@@ -94,7 +94,13 @@ const AddPost = () => {
     fetchCategories();
   }, []);
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
+  if (loading)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">

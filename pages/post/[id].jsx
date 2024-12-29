@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Sidebar from "../../components/Sidebar"; // Adjust the path as needed
+import Sidebar from "../../components/Sidebar";
 import Loader from "../../components/Loader";
-import PostCard from "../../components/PostCard"; // Adjust the path as needed
+import PostCard from "../../components/PostCard";
 
 const PostDetails = () => {
   const router = useRouter();
@@ -10,7 +10,6 @@ const PostDetails = () => {
 
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [relatedPosts, setRelatedPosts] = useState([]);
 
   useEffect(() => {
     if (id) {
@@ -58,8 +57,6 @@ const PostDetails = () => {
       </div>
     );
 
-  // if (loading) return <Loader />;
-
   if (!post) return <p className="text-center text-red-500">Post not found</p>;
 
   const descriptionChunks = splitDescription(post.description);
@@ -68,61 +65,47 @@ const PostDetails = () => {
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
       {/* Main Content */}
       <div className="flex-grow p-4 w-full lg:w-2/3 mx-auto overflow-y-auto scrollbar-none">
-        <div className="p-8 rounded-lg overflow-hidden">
-          {/* Render First Image
+        <div className="p-8 rounded-lg bg-white shadow-md">
+          {/* Title */}
+          <h1 className="text-4xl font-extrabold mb-4">{post.title}</h1>
+
+          {/* Metadata */}
+          <p className="mb-6">
+            By{" "}
+            <span className="font-medium">{post.authorDetails.username}</span> |{" "}
+            {new Date(post.post_date).toLocaleDateString()}
+          </p>
+          {/* Main Image */}
           {post.post_img[0] && (
-            <img
-              src={`/uploads/${post.post_img[0]}`}
-              alt={`${post.title} - Image 1`}
-              className="w-full h-auto object-cover rounded-lg mb-4"
-            />
-          )} */}
-          {/* Render First Image */}
-          {post.post_img[0] && (
-            <div className="relative w-full h-auto max-h-[400px] mb-4 overflow-hidden">
+            <div className="relative w-full h-96 mb-12">
               <img
                 src={`/uploads/${post.post_img[0]}`}
-                alt={`${post.title} - Image 1`}
-                className="w-full h-full object-contain"
-                style={{ maxHeight: "400px" }}
+                alt={`${post.title} - Main Image`}
+                className="absolute inset-0 w-full h-full object-cover rounded-lg"
               />
             </div>
           )}
-
-          {/* Title, Username, Date */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">
-              {post.title}
-            </h1>
-            <p className="text-gray-500">
-              By{" "}
-              <span className="font-semibold">
-                {post.authorDetails.username}
-              </span>{" "}
-              | {new Date(post.post_date).toLocaleDateString()}
-            </p>
-          </div>
-
           {/* First Description Chunk */}
           {descriptionChunks[0] && (
-            <p className="text-gray-700 leading-relaxed mb-8">
-              {descriptionChunks[0]}
-            </p>
+            <p className="leading-8 mb-8">{descriptionChunks[0]}</p>
           )}
 
           {/* Alternate Images and Description Chunks */}
           {descriptionChunks.slice(1).map((chunk, index) => (
             <div key={index} className="mb-8">
-              {/* Images corresponding to each subsequent chunk */}
+              {/* Additional Images */}
               {post.post_img[index + 1] && (
-                <img
-                  src={`/uploads/${post.post_img[index + 1]}`}
-                  alt={`${post.title} - Image ${index + 2}`}
-                  className="w-full h-auto object-cover rounded-lg mb-4"
-                />
+                <div className="relative w-full h-64 mb-4">
+                  <img
+                    src={`/uploads/${post.post_img[index + 1]}`}
+                    alt={`${post.title} - Image ${index + 2}`}
+                    className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                  />
+                </div>
               )}
-              {/* Description Chunk */}
-              <p className="text-gray-700 leading-relaxed">{chunk}</p>
+
+              {/* Additional Description */}
+              <p className="leading-8">{chunk}</p>
             </div>
           ))}
         </div>
@@ -130,7 +113,7 @@ const PostDetails = () => {
 
       {/* Related Posts for Small and Medium Screens */}
       <div className="lg:hidden p-4 w-full">
-        <h2 className="text-2xl font-extrabold text-center text-gray-800 mb-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
           Related Posts
         </h2>
         <PostCard />
