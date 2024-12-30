@@ -23,6 +23,7 @@ export default function AuthorPage() {
         const data = await response.json();
         if (data.success && Array.isArray(data.posts)) {
           setPosts(data.posts);
+          console.log('posts, ', posts)
           setLoading(false);
         } else {
           console.error("Unexpected API response format:", data);
@@ -70,7 +71,7 @@ export default function AuthorPage() {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post) => (
-            <div key={post._id} className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden">
+            <Link href={`/post/${post._id}`}  key={post._id} className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden">
               <div className="relative">
                 <img className="h-72 w-full object-cover" src={`/uploads/${post.post_img[0]}`} alt={post.title || "Post Image"} />
                 <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs font-bold uppercase px-4 py-2 rounded-br-lg">
@@ -82,13 +83,13 @@ export default function AuthorPage() {
                   {post.title || "Untitled Post"}
                 </h2>
                 <p className="text-sm text-gray-500 mb-4">
-                  Author <span className="font-semibold">{post.authorDetails?.username || "Unknown Author"}</span> | <span>{new Date(post.post_date).toLocaleDateString()}</span>
+                  Author <span className="font-semibold">{post.author_name || "Unknown Author"}</span> | <span>{new Date(post.post_date).toLocaleDateString()}</span>
                 </p>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   {post.description?.slice(0, 120) || "No description available..."}...
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </Wrapper>

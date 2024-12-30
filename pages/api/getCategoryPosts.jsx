@@ -1,6 +1,7 @@
 import connectDB from "../middleware/mongoose";
 import Category from "../../models/Category"; // Assuming you have a Category model
 import Post from "../../models/Post";
+import User from "../../models/User";
 
 const handler = async (req, res) => {
   if (req.method === "GET") {
@@ -35,10 +36,21 @@ const handler = async (req, res) => {
         });
       }
 
+      const postsWithAuthors = await Promise.all(posts.map(async (post) => {
+        const author = await User.findById(post.author); 
+        console.log('author',author)
+        return {
+          ...post.toObject(),
+          author_name: author ? author.username : 'Unknown', // Add author name, default to 'Unknown' if not found
+        };
+      }));
+
+      console.log('postsWithAuthors',postsWithAuthors)
+
       return res.status(200).json({
         success: true,
         category: category.category_name,
-        posts,
+        posts: postsWithAuthors,
       });
     } catch (error) {
       console.error("Error fetching posts by category ID:", error.message);
