@@ -150,10 +150,10 @@ const handler = async (req, res) => {
   
       // Process existing image paths (if provided)
       const existingImagePaths = Array.isArray(images) ? images : [images]; // Ensure images is an array
-      const newImagePaths = existingImagePaths.map((imagePath) => {
-        const imageName = imagePath.split('/').pop(); // Extract the image filename
-        return `${Date.now()}_${imageName}`; // Generate a new image name with timestamp
-      });
+      // const newImagePaths = existingImagePaths.map((imagePath) => {
+      //   const imageName = imagePath.split('/').pop(); // Extract the image filename
+      //   return `${Date.now()}_${imageName}`; // Generate a new image name with timestamp
+      // });
   
       // Process uploaded image files
       const uploadedImagePaths = [];
@@ -164,10 +164,18 @@ const handler = async (req, res) => {
           uploadedImagePaths.push(`${newFilename}`); // Store the path with /uploads/
         });
       }
+
+      console.log('existingImagePaths',existingImagePaths)
   
       // Combine both new and existing image paths
-      const allImagePaths = [...newImagePaths, ...uploadedImagePaths];
-  
+      const allImagePaths = [...existingImagePaths, ...uploadedImagePaths];
+      const obj={
+        title,
+        description,
+        category,
+        post_img: allImagePaths.length > 0 ? allImagePaths : post.post_img, // Update image paths
+      }
+      console.log('obj', obj)
       try {
         // Fetch the post from the database
         const post = await Post.findById(req.query.id);
