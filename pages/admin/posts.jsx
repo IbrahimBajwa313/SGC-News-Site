@@ -70,6 +70,7 @@ const Posts = () => {
     fetchPosts(); // Fetch posts on component mount
   }, []);
 
+<<<<<<< HEAD
   // if (isDeleting) return <Loader />;
   if (isDeleting)
     return (
@@ -84,6 +85,10 @@ const Posts = () => {
         <Loader />
       </div>
     );
+=======
+  if (isDeleting) return <Loader />;
+  if (loading) return <Loader />;
+>>>>>>> origin/main
 
   return (
     <div className="container mx-auto p-4 px-4 sm:px-8 min-h-screen mt-8">

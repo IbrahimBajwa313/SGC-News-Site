@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
 import { useRouter } from "next/router";
+<<<<<<< HEAD
 import { useUser } from "../context/UserContext";
 
 const Menu = ({
@@ -11,6 +12,12 @@ const Menu = ({
   setShowAuthorMenu,
 }) => {
   const { user, logout, updatePopup } = useUser();
+=======
+import { useUser } from '../context/UserContext';
+
+const Menu = ({ showCatMenu, setShowCatMenu, showAuthorMenu, setShowAuthorMenu }) => {
+  const { user, logout, updatePopup, } = useUser();
+>>>>>>> origin/main
   const [categories, setCategories] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [adminPage, setAdminPage] = useState(false);
@@ -55,10 +62,17 @@ const Menu = ({
     fetchCategories();
     fetchAuthors();
 
+<<<<<<< HEAD
     if (router.pathname.includes("/admin")) {
       setAdminPage(true);
     } else {
       setAdminPage(false);
+=======
+    if(router.pathname.includes('/admin')){
+      setAdminPage(true)
+    } else{
+      setAdminPage(false)
+>>>>>>> origin/main
     }
   }, [router]);
 
@@ -146,6 +160,7 @@ const Menu = ({
         ))}
 
         <li className="cursor-pointer border border-transparent rounded-md transition-transform duration-300 hover:scale-105 px-4 py-2">
+<<<<<<< HEAD
           {localStorage.getItem("loggedInUser") && adminPage && (
             <span onClick={() => updatePopup(true)} className="cursor-pointer">
               Logout
@@ -161,6 +176,26 @@ const Menu = ({
           )}
         </li>
       </ul>
+=======
+          {(localStorage.getItem("loggedInUser") && adminPage) && (
+            <span onClick={()=>updatePopup(true)} className="cursor-pointer">
+              Logout
+            </span>
+          ) }
+          {(localStorage.getItem("loggedInUser") && !adminPage) && (
+            <Link href='/admin/posts'  className="cursor-pointer">
+              Admin Panel
+            </Link>
+          ) }
+          {(!localStorage.getItem("loggedInUser")) && (
+                        <Link href='/login'>Login</Link>
+
+          ) }
+        </li>
+      </ul>
+
+      
+>>>>>>> origin/main
     </div>
   );
 };

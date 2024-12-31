@@ -26,6 +26,10 @@ yarn-error.log*
 
 # local env files
 .env*.local
+<<<<<<< HEAD
+=======
+.env
+>>>>>>> origin/main
 
 # vercel
 .vercel
@@ -35,4 +39,10 @@ yarn-error.log*
 next-env.d.ts
  
 # Ignore package-lock.json
+<<<<<<< HEAD
 package-lock.json
+=======
+package-lock.json
+
+ .git 
+>>>>>>> origin/main

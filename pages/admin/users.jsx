@@ -64,6 +64,7 @@ export default function Users() {
     setUserRole(role);
   }, []);
 
+<<<<<<< HEAD
   // if (isDeleting || loading) return <Loader />;
   if (isDeleting || loading)
     return (
@@ -71,6 +72,9 @@ export default function Users() {
         <Loader />
       </div>
     );
+=======
+  if (isDeleting || loading) return <Loader />;
+>>>>>>> origin/main
 
   return (
     <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-20 pb-20 pt-8">

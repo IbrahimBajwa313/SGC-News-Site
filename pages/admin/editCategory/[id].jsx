@@ -64,6 +64,7 @@ export default function EditCat() {
     }
   };
 
+<<<<<<< HEAD
   // if (isUpdating) return <Loader />;
   if (isUpdating)
     return (
@@ -71,6 +72,9 @@ export default function EditCat() {
         <Loader />
       </div>
     );
+=======
+  if (isUpdating) return <Loader />;
+>>>>>>> origin/main
 
   return (
     <div className="p-6 sm:p-8 md:p-12 bg-white rounded-lg shadow-lg max-w-3xl mx-auto">
