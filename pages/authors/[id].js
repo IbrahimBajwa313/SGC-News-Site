@@ -24,11 +24,6 @@ export default function AuthorPage() {
         const data = await response.json();
         if (data.success && Array.isArray(data.data)) {
           setPosts(data.data);
-<<<<<<< HEAD
-          console.log('posts, ', posts)
-
-=======
->>>>>>> origin/main
         } else {
           console.error("Unexpected API response format:", data);
         }
@@ -75,17 +70,8 @@ export default function AuthorPage() {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post) => (
-<<<<<<< HEAD
-            <Link href={`/post/${post._id}`} key={post._id} className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden">
-=======
             <div key={post._id} className="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out overflow-hidden">
->>>>>>> origin/main
-              <div className="relative">
-                <img className="h-72 w-full object-cover" src={`/uploads/${post.post_img[0]}`} alt={post.title || "Post Image"} />
-                <div className="absolute top-0 left-0 bg-blue-500 text-white text-xs font-bold uppercase px-4 py-2 rounded-br-lg">
                   {post.category || "Uncategorized"}
-                </div>
-              </div>
               <div className="p-6">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-3 hover:text-blue-500 transition-colors duration-300">
                   {post.title || "Untitled Post"}
@@ -97,11 +83,7 @@ export default function AuthorPage() {
                   {post.description?.slice(0, 120) || "No description available..."}...
                 </p>
               </div>
-<<<<<<< HEAD
-            </Link>
-=======
             </div>
->>>>>>> origin/main
           ))}
         </div>
       </Wrapper>

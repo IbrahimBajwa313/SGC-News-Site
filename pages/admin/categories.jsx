@@ -61,23 +61,8 @@ const Categories = () => {
     setUserRole(role);
   }, []);
 
-<<<<<<< HEAD
-  if (isDeleting)
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
-        <Loader />
-      </div>
-    );
-  if (loading)
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
-        <Loader />
-      </div>
-    );
-=======
   if (isDeleting) return <Loader />;
   if (loading) return <Loader />;
->>>>>>> origin/main
 
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:px-20 min-h-screen mt-8">

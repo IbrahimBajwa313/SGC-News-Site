@@ -25,11 +25,7 @@
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",
     "formidable": "^3.5.2",
-<<<<<<< HEAD
-    "framer-motion": "^10.18.0",
-=======
     "framer-motion": "^11.15.0",
->>>>>>> origin/main
     "locomotive-scroll": "^4.1.4",
     "md5": "^2.3.0",
     "mdb-react-ui-kit": "^9.0.0",

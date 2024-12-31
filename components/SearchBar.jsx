@@ -41,14 +41,10 @@ const SearchBar = ({ setshowsearch }) => {
   // Close suggestions when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-<<<<<<< HEAD
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-=======
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target)
       ) {
->>>>>>> origin/main
         setSuggestions([]); // Close suggestions
       }
     };
@@ -83,11 +79,7 @@ const SearchBar = ({ setshowsearch }) => {
         {/* Submit Button */}
         <button
           type="submit"
-<<<<<<< HEAD
-          className="bg-black text-white rounded-r-lg px-6 py-3 hover:bg-gray-900 transition duration-200"
-=======
           className="bg-black text-white rounded-r-lg px-6 py-3 hover:bg-gray-800 transition duration-200"
->>>>>>> origin/main
         >
           {/* Search Icon */}
           <BsSearch className="text-white" size={20} />

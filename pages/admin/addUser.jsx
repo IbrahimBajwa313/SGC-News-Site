@@ -137,8 +137,6 @@ export default function AddUser() {
     </div>
   );
 }
-<<<<<<< HEAD
-=======
 
 // import { useState } from "react";
 // import { useRouter } from "next/router";
@@ -293,4 +291,3 @@ export default function AddUser() {
 //     </div>
 //   );
 // }
->>>>>>> origin/main
