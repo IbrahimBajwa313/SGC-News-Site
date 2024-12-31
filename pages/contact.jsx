@@ -10,82 +10,82 @@ const Contact = () => {
       transition={{ duration: 0.5 }}
       className="relative bg-black text-white"
     >
-      <div className="container px-5 py-16 mx-auto">
+      <div className="container max-w-4xl px-4 sm:px-6 lg:px-8 py-12 mx-auto">
+        {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-4">
             Get in Touch
           </h1>
-          <p className="text-gray-400 text-lg">
-            We'd love to hear from you! <br />
-            Drop us a message and we’ll get back to you shortly.
+          <p className="text-gray-400 text-base sm:text-lg">
+            We'd love to hear from you! Drop us a message, and we’ll get back to
+            you shortly.
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto bg-gray-900 rounded-lg shadow-lg p-8 border border-gray-700">
+        {/* Form */}
+        <div className="bg-gray-900 rounded-lg shadow-lg p-6 sm:p-8 border border-gray-700">
           <form>
-            <div className="flex flex-wrap -m-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Name Field */}
-              <div className="p-2 w-full sm:w-1/2">
-                <div className="relative">
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-400"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    className="w-full mt-2 p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-gray-500 focus:border-gray-500"
-                  />
-                </div>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-400"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  className="mt-2 w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-gray-500 focus:border-gray-500"
+                />
               </div>
+
               {/* Email Field */}
-              <div className="p-2 w-full sm:w-1/2">
-                <div className="relative">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-400"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="w-full mt-2 p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-gray-500 focus:border-gray-500"
-                  />
-                </div>
-              </div>
-              {/* Message Field */}
-              <div className="p-2 w-full">
-                <div className="relative">
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-400"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    className="w-full mt-2 p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-gray-500 focus:border-gray-500 h-28 resize-none"
-                  ></textarea>
-                </div>
-              </div>
-              {/* Submit Button */}
-              <div className="p-2 w-full text-center">
-                <Link href="/">
-                  <button className="w-full sm:w-48 bg-white text-black font-semibold py-3 rounded-full shadow-md hover:opacity-90 transition-transform transform active:scale-95">
-                    Send Message
-                  </button>
-                </Link>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-400"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="mt-2 w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-gray-500 focus:border-gray-500"
+                />
               </div>
             </div>
+
+            {/* Message Field */}
+            <div className="mt-4">
+              <label
+                htmlFor="message"
+                className="block text-sm font-medium text-gray-400"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                className="mt-2 w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-gray-500 focus:border-gray-500 h-32 resize-none"
+              ></textarea>
+            </div>
+
+            {/* Submit Button */}
+            <div className="mt-6 text-center">
+              <Link href="/">
+                <button className="w-full sm:w-auto bg-white text-black font-semibold py-3 px-6 rounded-full shadow-md hover:opacity-90 transition-transform transform active:scale-95">
+                  Send Message
+                </button>
+              </Link>
+            </div>
           </form>
+
           {/* Contact Info */}
-          <div className="mt-8 border-t border-gray-700 pt-8 text-center text-gray-400">
+          <div className="mt-10 text-center text-gray-400">
             <a
               href="mailto:tameer2k23@gmail.com"
               className="text-white hover:underline"
@@ -93,13 +93,14 @@ const Contact = () => {
               tameer2k23@gmail.com
             </a>
             <p className="mt-4">
-              SGC Office S#23, 3rd Floor, Malikabad Centre near 6th Rd, Murree
+              SGC Office S#23, 3rd Floor, Malikabad Centre, near 6th Rd, Murree
               Rd, Rawalpindi
             </p>
+
             {/* Social Icons */}
-            <div className="flex justify-center mt-4 space-x-6">
+            <div className="flex justify-center mt-6 space-x-4">
               <a href="#" className="text-gray-400 hover:text-white">
-                {/* X Icon */}
+                {/* Facebook Icon */}
                 <svg
                   fill="currentColor"
                   className="w-6 h-6"

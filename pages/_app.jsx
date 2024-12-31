@@ -100,7 +100,10 @@ export default function App({ Component, pageProps }) {
           <FaWhatsapp size={50} />
         </Link>
 
-        <Head />
+        <Head>
+        <link rel="icon" href="/save-gaza-logo.png" />
+        <title>SGC Relief Activities</title>
+      </Head>
         <Headroom>
           <Header />
         </Headroom>

@@ -55,7 +55,6 @@ export default function AboutUs() {
           </section>
 
           {/* Section: Leader */}
-          {/* Section: Leader */}
           <section className="bg-white p-4 md:p-6 rounded-3xl shadow-md">
             <h2 className="font-extrabold text-center text-xl sm:text-2xl lg:text-3xl mb-4">
               Founder Save Gaza Campaign

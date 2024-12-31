@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { BsSearch } from "react-icons/bs";
 
-const SearchBar = ({ setshowsearch }) => {
+const MobileSearchBar = ({ setshowsearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const router = useRouter();
@@ -53,7 +53,7 @@ const SearchBar = ({ setshowsearch }) => {
   }, []);
 
   return (
-    <div className="relative w-full hidden lg:block" ref={dropdownRef}>
+    <div className="relative w-full lg:w-auto" ref={dropdownRef}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -76,7 +76,7 @@ const SearchBar = ({ setshowsearch }) => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="bg-black text-white rounded-r-lg px-6 py-3 hover:bg-gray-900 transition duration-200"
+          className="bg-black text-white rounded-r-lg px-6 py-3 hover:bg-gray-800 transition duration-200"
         >
           {/* Search Icon */}
           <BsSearch className="text-white" size={20} />
@@ -117,4 +117,4 @@ const SearchBar = ({ setshowsearch }) => {
   );
 };
 
-export default SearchBar;
+export default MobileSearchBar;

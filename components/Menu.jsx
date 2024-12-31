@@ -2,10 +2,15 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
 import { useRouter } from "next/router";
-import { useUser } from '../context/UserContext';
+import { useUser } from "../context/UserContext";
 
-const Menu = ({ showCatMenu, setShowCatMenu, showAuthorMenu, setShowAuthorMenu }) => {
-  const { user, logout, updatePopup, } = useUser();
+const Menu = ({
+  showCatMenu,
+  setShowCatMenu,
+  showAuthorMenu,
+  setShowAuthorMenu,
+}) => {
+  const { user, logout, updatePopup } = useUser();
   const [categories, setCategories] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [adminPage, setAdminPage] = useState(false);
@@ -50,10 +55,10 @@ const Menu = ({ showCatMenu, setShowCatMenu, showAuthorMenu, setShowAuthorMenu }
     fetchCategories();
     fetchAuthors();
 
-    if(router.pathname.includes('/admin')){
-      setAdminPage(true)
-    } else{
-      setAdminPage(false)
+    if (router.pathname.includes("/admin")) {
+      setAdminPage(true);
+    } else {
+      setAdminPage(false);
     }
   }, [router]);
 
@@ -141,24 +146,21 @@ const Menu = ({ showCatMenu, setShowCatMenu, showAuthorMenu, setShowAuthorMenu }
         ))}
 
         <li className="cursor-pointer border border-transparent rounded-md transition-transform duration-300 hover:scale-105 px-4 py-2">
-          {(localStorage.getItem("loggedInUser") && adminPage) && (
-            <span onClick={()=>updatePopup(true)} className="cursor-pointer">
+          {localStorage.getItem("loggedInUser") && adminPage && (
+            <span onClick={() => updatePopup(true)} className="cursor-pointer">
               Logout
             </span>
-          ) }
-          {(localStorage.getItem("loggedInUser") && !adminPage) && (
-            <Link href='/admin/posts'  className="cursor-pointer">
+          )}
+          {localStorage.getItem("loggedInUser") && !adminPage && (
+            <Link href="/admin/posts" className="cursor-pointer">
               Admin Panel
             </Link>
-          ) }
-          {(!localStorage.getItem("loggedInUser")) && (
-                        <Link href='/login'>Login</Link>
-
-          ) }
+          )}
+          {!localStorage.getItem("loggedInUser") && (
+            <Link href="/login">Login</Link>
+          )}
         </li>
       </ul>
-
-      
     </div>
   );
 };

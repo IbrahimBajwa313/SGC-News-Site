@@ -1,17 +1,13 @@
-
-
-import React, { useEffect, useState } from "react";
-import { CiSearch } from "react-icons/ci";
-import Wrapper from "./Wrapper";
+import React, { useEffect, useState, useRef } from "react";
 import Menu from "./Menu";
 import MenuMobile from "./MenuMobile";
 import Link from "next/link";
 import { BiMenu } from "react-icons/bi";
-import { BsCart3 } from "react-icons/bs";
 import { VscChromeClose } from "react-icons/vsc";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import SearchBar from "./SearchBar";
+import MobileSearchBar from "./MobileSearchBar"; // Import the MobileSearchBar component
 
 const Header = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -20,13 +16,14 @@ const Header = () => {
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [showsearch, setshowsearch] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const headerRef = useRef(null); // Ref for the header
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   return (
-    <div className="bg-white w-screen">
+    <div className="bg-white w-screen" ref={headerRef}>
       {isClient && showsearch}
 
       {isClient && !showsearch && (
@@ -66,8 +63,9 @@ const Header = () => {
               setShowCatMenu={setShowCatMenu}
               setMobileMenu={setMobileMenu}
               showCatMenu={showCatMenu}
-              showSortMenu={showSortMenu}
-              setShowSortMenu={setShowSortMenu}
+              showAuthorMenu={showAuthorMenu}
+              setShowAuthorMenu={setShowAuthorMenu}
+              headerHeight={headerRef.current?.clientHeight} // Pass header height
             />
           )}
 
@@ -84,21 +82,23 @@ const Header = () => {
                   className="relative left-12 text-[22px] lg:hidden md:text-[28px]"
                   onClick={() => setMobileMenu(true)}
                 />
-                <CiSearch
-                  onClick={() => {
-                    setshowsearch(true);
-                  }}
-                  className="relative ml-5 left-12 text-[22px] lg:hidden md:text-[28px]"
-                />
               </div>
             )}
-          <SearchBar  />
+            <div className="hidden lg:block">
+              <SearchBar setshowsearch={setshowsearch} />
+            </div>
           </div>
         </motion.div>
+      )}
+
+      {/* Mobile Search Bar */}
+      {mobileMenu && (
+        <div className="lg:hidden">
+          <MobileSearchBar setShowSearch={setMobileMenu} />
+        </div>
       )}
     </div>
   );
 };
 
 export default Header;
- 
